@@ -175,7 +175,7 @@
         <label>Multas para entrar no sistema</label>
         <div style="display: flex; gap: 5px;">
           <input type="text" id="quantidadeMultas" style="flex: 0.6;" oninput="atualizarPreview()">
-          <input type="text" id="valorMultas" style="flex: 1.4;" placeholder="valor total de" oninput="atualizarPreview()">
+          <input type="text" id="valorMultas" style="flex: 1.4;" placeholder="" oninput="atualizarPreview()">
         </div>
       </div>
 
@@ -330,7 +330,7 @@
         if (qtdMultas <= 0) {
           mensagem += `\nSem multas para entrar no sistema`;
         } else {
-          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema (valor de ${valorMultas})`;
+          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
         }
       }
 
@@ -441,7 +441,7 @@
         if (qtdMultas <= 0) {
           mensagem += `\nSem multas para entrar no sistema`;
         } else {
-          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema (valor de ${valorMultas})`;
+          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
         }
       }
 
