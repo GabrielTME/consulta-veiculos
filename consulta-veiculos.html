@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Veículo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      min-height: 0;
+    }
+    .form-container, .preview-container {
+      padding: 20px;
+      flex: 1 1 0;
+      overflow-y: hidden; /* remove o scroll vertical */
+      min-height: 0;
+      box-sizing: border-box;
+    }
+    .form-container {
+      background: #f5f5f5;
+      border-right: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      min-height: 0;
+      overflow-y: auto; /* Adicionar esta linha */
+    }
+    .form-container > div {
+      max-width: 360px;
+      width: 100%;
+    }
+    .preview-container {
+      background: #111b21;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+    .whatsapp-message {
+      background: #202c33;
+      color: #e9edef;
+      border-radius: 7.5px;
+      padding: 14px 18px;
+      max-width: 600px;
+      font-size: 18px; /* aumentado de 15px para 18px */
+      line-height: 1.5;
+      white-space: pre-wrap;
+      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    }
+    .field-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .inline-checkboxes {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .debito-linha {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .debito-linha input {
+      flex: 1;
+    }
+    .plus-button {
+      padding: 6px 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #observacaoTexto {
+      margin-top: 6px;
+    }
+  </style>
+<script defer data-domain="consulta-veiculo.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script><script defer data-domain="consulta-veiculo.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script></head>
+<body>
+  <div class="form-container">
+    <div>
+      <div class="field-group">
+        <label>Marca / Modelo / Ano</label>
+        <div style="display: flex; gap: 5px;">
+          <input type="text" id="marca" style="flex: 1;" oninput="atualizarPreview()">
+          <input type="text" id="modelo" style="flex: 1;" oninput="atualizarPreview()">
+          <input type="text" id="ano" style="flex: 1;" oninput="atualizarPreview()">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Proprietário</label>
+        <input type="text" id="proprietario" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Emplacado em</label>
+        <input type="text" id="emplacadoEm" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label><input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Emplacado anteriormente?</label>
+        <input type="text" id="emplacadoAnterior" style="display: none;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>
+          <input type="checkbox" id="temFinanciamento" onchange="atualizarPreview()"> Possui financiamento?
+          <input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A ser incluido?
+        </label>
+        <input type="text" id="financiamentoInfo" style="display: none;" oninput="atualizarPreview()">
+        <label id="labelDataContrato" style="display: none; margin-top: 6px;">Data do contrato</label>
+        <input type="text" id="dataContrato" style="display: none;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label><input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui restrição<span title="Restrição judicial ou administrativa">?</span></label>
+        <select id="renajudTipo" style="display: none;" onchange="atualizarPreview()">
+          <option value="transferência">RENAJUD de transferência</option>
+          <option value="licenciamento">RENAJUD de licenciamento</option>
+          <option value="circulação">RENAJUD de circulação</option>
+          <option value="penhora">RENAJUD de penhora</option>
+          <option value="execucao-certidao">Execução por certidão</option>
+        </select>
+      </div>
+
+      <div class="field-group inline-checkboxes">
+        <label><input type="checkbox" id="temIntencao" onchange="atualizarPreview()"> Intenção</label>
+        <label><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunicação</label>
+      </div>
+      <input type="text" id="nomeIntencao" style="display: none;" oninput="atualizarPreview()">
+
+      <div class="field-group" style="margin-top: 18px;">
+        <label><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Observação?</label>
+        <input type="text" id="observacaoTexto" style="display: none;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Débitos</label>
+        <div id="debitosContainer"></div>
+        <button class="plus-button" type="button" onclick="adicionarDebito()">+</button>
+      </div>
+
+      <div class="field-group">
+        <label>Valor</label>
+        <input type="text" id="debitoValor" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Multas para entrar no sistema</label>
+        <div style="display: flex; gap: 5px;">
+          <input type="text" id="quantidadeMultas" style="flex: 0.6;" oninput="atualizarPreview()">
+          <input type="text" id="valorMultas" style="flex: 1.4;" placeholder="valor total de" oninput="atualizarPreview()">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button onclick="copiarMensagem()">Copiar</button>
+        <button onclick="limparCampos()">Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-container">
+    <div class="whatsapp-message" id="previewMsg">
+      Pré-visualização da mensagem
+    </div>
+  </div>
+
+  <script>
+    function capitalizeWords(str) {
+      // Palavras de duas letras que começam com D para manter minúsculas
+      const dWords = ['de', 'da', 'do', 'das', 'dos'];
+      return str
+        .toLowerCase()
+        .replace(/(?:^|\s|[.])[a-zà-ú]/g, function(match) {
+          return match.toUpperCase();
+        })
+        .replace(/\b([Dd][aeo]s?)\b/g, function(match) {
+          return dWords.includes(match.toLowerCase()) ? match.toLowerCase() : match;
+        });
+    }
+
+    function onInputCapitalize(e) {
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      const value = e.target.value;
+      const newValue = capitalizeWords(value);
+      if (value !== newValue) {
+        e.target.value = newValue;
+        // restaura o cursor
+        e.target.setSelectionRange(start, end);
+      }
+    }
+
+    function adicionarDebito() {
+      const container = document.getElementById('debitosContainer');
+      const linha = document.createElement('div');
+      linha.className = 'debito-linha';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'descricaoDebito';
+      // Remover o listener de capitalização
+      // input.addEventListener('input', onInputCapitalize);
+      input.addEventListener('input', atualizarPreview);
+      linha.appendChild(input);
+      container.appendChild(linha);
+    }
+
+    function formatarValor(valor) {
+      const numero = parseFloat(valor.replace(/[^0-9]/g, ''));
+      if (isNaN(numero)) return '';
+      return 'R$' + numero.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+    }
+
+    function atualizarPreview() {
+      // campos de texto a serem capitalizados
+      const marca = document.getElementById('marca').value;
+      const modelo = document.getElementById('modelo').value;
+      const ano = capitalizeWords(document.getElementById('ano').value);
+      const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : ''; // sem capitalizeWords
+      const proprietario = capitalizeWords(document.getElementById('proprietario').value);
+      const emplacadoEm = document.getElementById('emplacadoEm').value; // sem capitalizeWords
+      const financiamento = document.getElementById('temFinanciamento').checked ? document.getElementById('financiamentoInfo').value : '';
+      const financiamentoIncluso = document.getElementById('financiamentoIncluso').checked;
+      const dataContrato = capitalizeWords(document.getElementById('dataContrato').value);
+      const temRenajud = document.getElementById('temRenajud').checked;
+      const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
+      const debitoValor = formatarValor(document.getElementById('debitoValor').value);
+      const temIntencao = document.getElementById('temIntencao').checked;
+      const temComunicacao = document.getElementById('temComunicacao').checked;
+      const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
+      const temObs = document.getElementById('temObservacao').checked;
+      const obsTexto = document.getElementById('observacaoTexto').value; // sem capitalizeWords
+      const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
+      const valorMultas = formatarValor(document.getElementById('valorMultas').value);
+
+      let mensagem = '';
+
+      if (marca || modelo || ano) mensagem += `*${marca} ${modelo} ${ano}*\n`;
+      if (proprietario) mensagem += `Proprietário ${proprietario}\n`;
+      if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
+      if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
+      if (financiamento) {
+        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluso' : ''} em favor do banco ${financiamento}\n`;
+      }
+      if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
+
+      if (temRenajud && renajud) {
+        if (renajud === 'execucao-certidao') {
+          mensagem += `\n*Veículo possui uma restrição de execução por certidão*\n`;
+        } else {
+          mensagem += `\n*Possui RENAJUD de ${renajud}*\n`;
+        }
+      } else {
+        mensagem += `\nNão possui restrição judicial ou administrativa\n`;
+      }
+
+      if ((temIntencao || temComunicacao) && nomeIntencao) {
+        if (temIntencao && temComunicacao) {
+          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}\n`;
+        } else if (temIntencao) {
+          mensagem += `\nPossui intenção de venda para ${nomeIntencao}\n`;
+        } else if (temComunicacao) {
+          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}\n`;
+        }
+      }
+
+      if (temObs && obsTexto) {
+        mensagem += `\n${obsTexto}\n`;
+      }
+
+      const descricoes = document.querySelectorAll('.descricaoDebito');
+      let debitosTextos = [];
+      descricoes.forEach(input => {
+        const valor = input.value.trim(); // sem capitalizeWords
+        if (valor) debitosTextos.push(valor);
+      });
+
+      if (debitosTextos.length > 0) {
+        mensagem += `\n`;
+        if (debitosTextos.length === 1) {
+          if (debitoValor) {
+            mensagem += `${debitosTextos[0]} =\n*${debitoValor}*\n`;
+          } else {
+            mensagem += `${debitosTextos[0]} =\n`;
+          }
+        } else {
+          for (let i = 0; i < debitosTextos.length; i++) {
+            if (i === debitosTextos.length - 1) {
+              mensagem += `${debitosTextos[i]} =\n`;
+            } else {
+              mensagem += `${debitosTextos[i]} +\n`;
+            }
+          }
+          if (debitoValor) {
+            mensagem += `*${debitoValor}*\n`;
+          }
+        }
+      } else {
+        mensagem += `\nSem débitos, veículo em dia (2025)\n`;
+      }
+
+      if (!isNaN(qtdMultas)) {
+        if (qtdMultas <= 0) {
+          mensagem += `\nSem multas para entrar no sistema`;
+        } else {
+          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema (valor de ${valorMultas})`;
+        }
+      }
+
+      // Exibe o preview com negrito visual (substitui **texto** por <b>texto</b>)
+      function renderNegrito(texto) {
+        return texto.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
+      }
+      document.getElementById('previewMsg').innerHTML = renderNegrito(mensagem.trim() || 'Pré-visualização da mensagem');
+
+      document.getElementById('nomeIntencao').style.display = (temIntencao || temComunicacao) ? 'block' : 'none';
+      document.getElementById('observacaoTexto').style.display = temObs ? 'block' : 'none';
+      document.getElementById('emplacadoAnterior').style.display = document.getElementById('temAnterior').checked ? 'block' : 'none';
+      document.getElementById('financiamentoInfo').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
+      document.getElementById('dataContrato').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
+      document.getElementById('labelDataContrato').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
+      document.getElementById('renajudTipo').style.display = temRenajud ? 'block' : 'none';
+    }
+
+    function copiarMensagem() {
+      // Copia o texto com asteriscos (não o renderizado)
+      let mensagem = '';
+      // Gera a mensagem novamente, igual ao preview, mais sem HTML
+      const marca = document.getElementById('marca').value;
+      const modelo = document.getElementById('modelo').value;
+      const ano = capitalizeWords(document.getElementById('ano').value);
+      const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : '';
+      const proprietario = capitalizeWords(document.getElementById('proprietario').value);
+      const emplacadoEm = document.getElementById('emplacadoEm').value; // sem capitalizeWords
+      const financiamento = document.getElementById('temFinanciamento').checked ? document.getElementById('financiamentoInfo').value : '';
+      const financiamentoIncluso = document.getElementById('financiamentoIncluso').checked;
+      const dataContrato = capitalizeWords(document.getElementById('dataContrato').value);
+      const temRenajud = document.getElementById('temRenajud').checked;
+      const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
+      const debitoValor = formatarValor(document.getElementById('debitoValor').value);
+      const temIntencao = document.getElementById('temIntencao').checked;
+      const temComunicacao = document.getElementById('temComunicacao').checked;
+      const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
+      const temObs = document.getElementById('temObservacao').checked;
+      const obsTexto = document.getElementById('observacaoTexto').value;
+      const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
+      const valorMultas = formatarValor(document.getElementById('valorMultas').value);
+
+      if (marca || modelo || ano) mensagem += `*${marca} ${modelo} ${ano}*\n`;
+      if (proprietario) mensagem += `Proprietário ${proprietario}\n`;
+      if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
+      if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
+      if (financiamento) {
+        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluso' : ''} em favor do banco ${financiamento}\n`;
+      }
+      if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
+
+      if (temRenajud && renajud) {
+        if (renajud === 'execucao-certidao') {
+          mensagem += `\nVeículo possui uma restrição de execução por certidão\n`;
+        } else {
+          mensagem += `\n*Possui RENAJUD de ${renajud}*\n`;
+        }
+      } else {
+        mensagem += `\nNão possui restrição judicial ou administrativa\n`;
+      }
+
+      if ((temIntencao || temComunicacao) && nomeIntencao) {
+        if (temIntencao && temComunicacao) {
+          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}\n`;
+        } else if (temIntencao) {
+          mensagem += `\nPossui intenção de venda para ${nomeIntencao}\n`;
+        } else if (temComunicacao) {
+          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}\n`;
+        }
+      }
+
+      if (temObs && obsTexto) {
+        mensagem += `\n${obsTexto}\n`;
+      }
+
+      const descricoes = document.querySelectorAll('.descricaoDebito');
+      let debitosTextos = [];
+      descricoes.forEach(input => {
+        const valor = input.value.trim();
+        if (valor) debitosTextos.push(valor);
+      });
+
+      if (debitosTextos.length > 0) {
+        mensagem += `\n`;
+        if (debitosTextos.length === 1) {
+          if (debitoValor) {
+            mensagem += `${debitosTextos[0]} =\n*${debitoValor}*\n`;
+          } else {
+            mensagem += `${debitosTextos[0]} =\n`;
+          }
+        } else {
+          for (let i = 0; i < debitosTextos.length; i++) {
+            if (i === debitosTextos.length - 1) {
+              mensagem += `${debitosTextos[i]} =\n`;
+            } else {
+              mensagem += `${debitosTextos[i]} +\n`;
+            }
+          }
+          if (debitoValor) {
+            mensagem += `*${debitoValor}*\n`;
+          }
+        }
+      } else {
+        mensagem += `\nSem débitos, veículo em dia (2025)\n`;
+      }
+
+      if (!isNaN(qtdMultas)) {
+        if (qtdMultas <= 0) {
+          mensagem += `\nSem multas para entrar no sistema`;
+        } else {
+          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema (valor de ${valorMultas})`;
+        }
+      }
+
+      navigator.clipboard.writeText(mensagem.trim()).then(() => alert('Mensagem copiada'));
+    }
+
+    function limparCampos() {
+      document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+      });
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.querySelectorAll('select').forEach(sel => sel.value = sel.options[0].value);
+      document.getElementById('debitosContainer').innerHTML = '';
+      adicionarDebito();
+      atualizarPreview();
+    }
+
+    window.onload = () => {
+      // Adiciona listener de capitalização para todos os campos de texto, exceto marca, modelo, observacaoTexto, financiamentoInfo, emplacadoAnterior e emplacadoEm
+      document.querySelectorAll('input[type="text"]').forEach(input => {
+        if (
+          input.id !== 'marca' &&
+          input.id !== 'modelo' &&
+          input.id !== 'observacaoTexto' &&
+          input.id !== 'financiamentoInfo' &&
+          input.id !== 'emplacadoAnterior' &&
+          input.id !== 'emplacadoEm'
+        ) {
+          input.addEventListener('input', onInputCapitalize);
+        }
+      });
+      adicionarDebito();
+      atualizarPreview();
+    };
+  </script>
+</body>
+</html>
