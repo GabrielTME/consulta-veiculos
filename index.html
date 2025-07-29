@@ -356,7 +356,7 @@
     function copiarMensagem() {
       // Copia o texto com asteriscos (não o renderizado)
       let mensagem = '';
-      // Gera a mensagem novamente, igual ao preview, mais sem HTML
+      // Gera a mensagem novamente, igual ao preview, mas sem HTML
       const marca = document.getElementById('marca').value;
       const modelo = document.getElementById('modelo').value;
       const ano = capitalizeWords(document.getElementById('ano').value);
@@ -375,6 +375,8 @@
       const dataInclusaoIntencao = document.getElementById('dataInclusaoIntencao').value;
       const temObs = document.getElementById('temObservacao').checked;
       const obsTexto = document.getElementById('observacaoTexto').value;
+      const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
+      const valorMultas = formatarValor(document.getElementById('valorMultas').value);
 
       if (marca || modelo || ano) mensagem += `*${marca} ${modelo} ${ano}*\n`;
       if (proprietario) mensagem += `Proprietário ${proprietario}\n`;
@@ -449,7 +451,23 @@
         }
       }
 
-      navigator.clipboard.writeText(mensagem.trim()).then(() => alert('Mensagem copiada'));
+      // Copiar para a área de transferência
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(mensagem.trim()).then(() => alert('Mensagem copiada'));
+      } else {
+        // Fallback para navegadores antigos
+        const textarea = document.createElement('textarea');
+        textarea.value = mensagem.trim();
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          alert('Mensagem copiada');
+        } catch (err) {
+          alert('Não foi possível copiar a mensagem');
+        }
+        document.body.removeChild(textarea);
+      }
     }
 
     function limparCampos() {
