@@ -154,6 +154,7 @@
         <label><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunicação</label>
       </div>
       <input type="text" id="nomeIntencao" style="display: none;" oninput="atualizarPreview()">
+      <input type="text" id="dataInclusaoIntencao" style="display: none; margin-top: 6px;" oninput="atualizarPreview()">
 
       <div class="field-group" style="margin-top: 18px;">
         <label><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Observação?</label>
@@ -255,6 +256,7 @@
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
+      const dataInclusaoIntencao = document.getElementById('dataInclusaoIntencao').value; // novo campo
       const temObs = document.getElementById('temObservacao').checked;
       const obsTexto = document.getElementById('observacaoTexto').value; // sem capitalizeWords
       const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
@@ -282,12 +284,13 @@
       }
 
       if ((temIntencao || temComunicacao) && nomeIntencao) {
+        let dataStr = dataInclusaoIntencao ? ` (data de inclusão ${dataInclusaoIntencao})` : '';
         if (temIntencao && temComunicacao) {
-          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}\n`;
+          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}${dataStr}\n`;
         } else if (temIntencao) {
-          mensagem += `\nPossui intenção de venda para ${nomeIntencao}\n`;
+          mensagem += `\nPossui intenção de venda para ${nomeIntencao}${dataStr}\n`;
         } else if (temComunicacao) {
-          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}\n`;
+          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}${dataStr}\n`;
         }
       }
 
@@ -341,6 +344,7 @@
       document.getElementById('previewMsg').innerHTML = renderNegrito(mensagem.trim() || 'Pré-visualização da mensagem');
 
       document.getElementById('nomeIntencao').style.display = (temIntencao || temComunicacao) ? 'block' : 'none';
+      document.getElementById('dataInclusaoIntencao').style.display = (temIntencao || temComunicacao) ? 'block' : 'none';
       document.getElementById('observacaoTexto').style.display = temObs ? 'block' : 'none';
       document.getElementById('emplacadoAnterior').style.display = document.getElementById('temAnterior').checked ? 'block' : 'none';
       document.getElementById('financiamentoInfo').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
@@ -368,10 +372,9 @@
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
+      const dataInclusaoIntencao = document.getElementById('dataInclusaoIntencao').value;
       const temObs = document.getElementById('temObservacao').checked;
       const obsTexto = document.getElementById('observacaoTexto').value;
-      const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
-      const valorMultas = formatarValor(document.getElementById('valorMultas').value);
 
       if (marca || modelo || ano) mensagem += `*${marca} ${modelo} ${ano}*\n`;
       if (proprietario) mensagem += `Proprietário ${proprietario}\n`;
@@ -393,12 +396,13 @@
       }
 
       if ((temIntencao || temComunicacao) && nomeIntencao) {
+        let dataStr = dataInclusaoIntencao ? ` (data de inclusão ${dataInclusaoIntencao})` : '';
         if (temIntencao && temComunicacao) {
-          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}\n`;
+          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}${dataStr}\n`;
         } else if (temIntencao) {
-          mensagem += `\nPossui intenção de venda para ${nomeIntencao}\n`;
+          mensagem += `\nPossui intenção de venda para ${nomeIntencao}${dataStr}\n`;
         } else if (temComunicacao) {
-          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}\n`;
+          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}${dataStr}\n`;
         }
       }
 
@@ -455,6 +459,7 @@
       document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
       document.querySelectorAll('select').forEach(sel => sel.value = sel.options[0].value);
       document.getElementById('debitosContainer').innerHTML = '';
+      document.getElementById('dataInclusaoIntencao').value = '';
       adicionarDebito();
       atualizarPreview();
     }
