@@ -136,7 +136,7 @@
       <div class="field-group">
         <label>
           <input type="checkbox" id="temFinanciamento" onchange="atualizarPreview()"> Possui financiamento?
-          <input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A ser incluido?
+          <input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A ser incluído?
         </label>
         <input type="text" id="financiamentoInfo" style="display: none;" oninput="atualizarPreview()">
         <label id="labelDataContrato" style="display: none; margin-top: 6px;">Data do contrato</label>
@@ -152,6 +152,7 @@
           <option value="penhora">RENAJUD de penhora</option>
           <option value="execucao-certidao">Execução por certidão</option>
           <option value="administrativa">Administrativa</option>
+          <option value="averbacao">Averbação</option>
         </select>
       </div>
 
@@ -162,7 +163,7 @@
       <input type="text" id="nomeIntencao" style="display: none;" oninput="atualizarPreview()">
       <input type="text" id="dataInclusaoIntencao" style="display: none; margin-top: 6px;" oninput="atualizarPreview()">
 
-      <div class="field-group" style="margin-top: 18px;">
+      <div class="field-group" style="margin-top: 12px;">
         <label><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Observação?</label>
         <input type="text" id="observacaoTexto" style="display: none;" oninput="atualizarPreview()">
       </div>
@@ -245,7 +246,7 @@
       const marca = document.getElementById('marca').value;
       const modelo = document.getElementById('modelo').value;
       const ano = capitalizeWords(document.getElementById('ano').value);
-      const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : ''; // sem capitalizeWords
+      const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : '';
       const proprietario = capitalizeWords(document.getElementById('proprietario').value);
       const proprietarioCnpj = document.getElementById('proprietarioCnpj').checked;
       const emplacadoEm = document.getElementById('emplacadoEm').value;
@@ -280,6 +281,8 @@
           mensagem += `\n*Veículo possui uma restrição de execução por certidão*\n`;
         } else if (renajud === 'administrativa') {
           mensagem += `\n*Possui restrição administrativa*\n`;
+        } else if (renajud === 'averbacao') {
+          mensagem += `\n*Possui uma averbação de execução por certidão*\n`;
         } else {
           mensagem += `\n*Possui RENAJUD de ${renajud}*\n`;
         }
@@ -393,7 +396,9 @@
         if (renajud === 'execucao-certidao') {
           mensagem += `\nVeículo possui uma restrição de execução por certidão\n`;
         } else if (renajud === 'administrativa') {
-          mensagem += `\n*Possui restrição administrativa*\n`; // <-- Adiciona asteriscos
+          mensagem += `\n*Possui restrição administrativa*\n`;
+        } else if (renajud === 'averbacao') {
+          mensagem += `\n*Possui uma averbação de execução por certidão*\n`;
         } else {
           mensagem += `\n*Possui RENAJUD de ${renajud}*\n`;
         }
