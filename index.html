@@ -177,7 +177,10 @@
 
       <div class="field-group">
         <label>Valor</label>
-        <input type="text" id="debitoValor" oninput="atualizarPreview()">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="text" id="debitoValor" oninput="atualizarPreview()">
+          <input type="checkbox" id="valorColocarEmDia" onchange="atualizarPreview()" style="margin-left:4px;">
+        </div>
       </div>
 
       <div class="field-group">
@@ -214,14 +217,28 @@
         });
     }
 
+    function formatarProprietario(str) {
+      let texto = capitalizeWords(str);
+      texto = texto.replace(/\bltda\b/gi, 'LTDA');
+      return texto;
+    }
+
     function onInputCapitalize(e) {
       const start = e.target.selectionStart;
       const end = e.target.selectionEnd;
-      const value = e.target.value;
-      const newValue = capitalizeWords(value);
-      if (value !== newValue) {
-        e.target.value = newValue;
-        e.target.setSelectionRange(start, end);
+      let value = e.target.value;
+      if (e.target.id === 'proprietario') {
+        const newValue = formatarProprietario(value);
+        if (value !== newValue) {
+          e.target.value = newValue;
+          e.target.setSelectionRange(start, end);
+        }
+      } else {
+        const newValue = capitalizeWords(value);
+        if (value !== newValue) {
+          e.target.value = newValue;
+          e.target.setSelectionRange(start, end);
+        }
       }
     }
 
@@ -240,7 +257,7 @@
     function formatarValor(valor) {
       const numero = parseFloat(valor.replace(/[^0-9]/g, ''));
       if (isNaN(numero)) return '';
-      return 'R$' + numero.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
+      return 'R$' + numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function atualizarPreview() {
@@ -248,7 +265,7 @@
       const modelo = document.getElementById('modelo').value;
       const ano = capitalizeWords(document.getElementById('ano').value);
       const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : '';
-      const proprietario = capitalizeWords(document.getElementById('proprietario').value);
+      const proprietario = formatarProprietario(document.getElementById('proprietario').value);
       const proprietarioCnpj = document.getElementById('proprietarioCnpj').checked;
       const emplacadoEm = document.getElementById('emplacadoEm').value;
       const financiamento = document.getElementById('temFinanciamento').checked ? document.getElementById('financiamentoInfo').value : '';
@@ -257,6 +274,7 @@
       const temRenajud = document.getElementById('temRenajud').checked;
       const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
       const debitoValor = formatarValor(document.getElementById('debitoValor').value);
+      const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
@@ -273,13 +291,13 @@
       if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
       if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
       if (financiamento) {
-        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluido' : ''} em favor do banco ${financiamento}\n`;
+        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}\n`;
       }
       if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
 
       if (temRenajud && renajud) {
         if (renajud === 'execucao-certidao') {
-          mensagem += `\n*Veículo possui uma restrição de execução por certidão*\n`;
+          mensagem += `\n*Possui uma restrição de execução por certidão*\n`;
         } else if (renajud === 'administrativa') {
           mensagem += `\n*Possui restrição administrativa*\n`;
         } else if (renajud === 'averbacao') {
@@ -315,7 +333,20 @@
 
       if (debitosTextos.length > 0) {
         mensagem += `\n`;
-        if (debitosTextos.length === 1) {
+        if (valorColocarEmDia && debitoValor) {
+          if (debitosTextos.length === 1) {
+            mensagem += `${debitosTextos[0]} =\n`;
+          } else {
+            for (let i = 0; i < debitosTextos.length; i++) {
+              if (i === debitosTextos.length - 1) {
+                mensagem += `${debitosTextos[i]} =\n`;
+              } else {
+                mensagem += `${debitosTextos[i]} +\n`;
+              }
+            }
+          }
+          mensagem += `*${debitoValor}* pra colocar em dia\n`;
+        } else if (debitosTextos.length === 1) {
           if (debitoValor) {
             mensagem += `${debitosTextos[0]} =\n*${debitoValor}*\n`;
           } else {
@@ -340,8 +371,10 @@
       if (!isNaN(qtdMultas)) {
         if (qtdMultas <= 0) {
           mensagem += `\nSem multas para entrar no sistema`;
+        } else if (qtdMultas === 1) {
+          mensagem += `\n*1* multa que ainda não caiu no sistema${valorMultas ? ` (valor de ${valorMultas})` : ''}`;
         } else {
-          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
+          mensagem += `\n*${qtdMultas}* multas que ainda não caíram no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
         }
       }
 
@@ -366,7 +399,7 @@
       const modelo = document.getElementById('modelo').value;
       const ano = capitalizeWords(document.getElementById('ano').value);
       const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : '';
-      const proprietario = capitalizeWords(document.getElementById('proprietario').value);
+      const proprietario = formatarProprietario(document.getElementById('proprietario').value);
       const proprietarioCnpj = document.getElementById('proprietarioCnpj').checked;
       const emplacadoEm = document.getElementById('emplacadoEm').value;
       const financiamento = document.getElementById('temFinanciamento').checked ? document.getElementById('financiamentoInfo').value : '';
@@ -375,6 +408,7 @@
       const temRenajud = document.getElementById('temRenajud').checked;
       const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
       const debitoValor = formatarValor(document.getElementById('debitoValor').value);
+      const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
@@ -389,13 +423,13 @@
       if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
       if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
       if (financiamento) {
-        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluido' : ''} em favor do banco ${financiamento}\n`;
+        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}\n`;
       }
       if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
 
       if (temRenajud && renajud) {
         if (renajud === 'execucao-certidao') {
-          mensagem += `\nVeículo possui uma restrição de execução por certidão\n`;
+          mensagem += `\nPossui uma restrição de execução por certidão\n`;
         } else if (renajud === 'administrativa') {
           mensagem += `\n*Possui restrição administrativa*\n`;
         } else if (renajud === 'averbacao') {
@@ -431,7 +465,20 @@
 
       if (debitosTextos.length > 0) {
         mensagem += `\n`;
-        if (debitosTextos.length === 1) {
+        if (valorColocarEmDia && debitoValor) {
+          if (debitosTextos.length === 1) {
+            mensagem += `${debitosTextos[0]} =\n`;
+          } else {
+            for (let i = 0; i < debitosTextos.length; i++) {
+              if (i === debitosTextos.length - 1) {
+                mensagem += `${debitosTextos[i]} =\n`;
+              } else {
+                mensagem += `${debitosTextos[i]} +\n`;
+              }
+            }
+          }
+          mensagem += `*${debitoValor}* pra colocar em dia\n`;
+        } else if (debitosTextos.length === 1) {
           if (debitoValor) {
             mensagem += `${debitosTextos[0]} =\n*${debitoValor}*\n`;
           } else {
@@ -456,8 +503,10 @@
       if (!isNaN(qtdMultas)) {
         if (qtdMultas <= 0) {
           mensagem += `\nSem multas para entrar no sistema`;
+        } else if (qtdMultas === 1) {
+          mensagem += `\n*1* multa que ainda não caiu no sistema${valorMultas ? ` (valor de ${valorMultas})` : ''}`;
         } else {
-          mensagem += `\n*${qtdMultas}* multa${qtdMultas > 1 ? 's' : ''} para entrar no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
+          mensagem += `\n*${qtdMultas}* multas que ainda não caíram no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
         }
       }
 
