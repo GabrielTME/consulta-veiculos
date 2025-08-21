@@ -220,6 +220,8 @@
     function formatarProprietario(str) {
       let texto = capitalizeWords(str);
       texto = texto.replace(/\bltda\b/gi, 'LTDA');
+      // Deixa " E " sozinha como " e "
+      texto = texto.replace(/\bE\b/g, 'e');
       return texto;
     }
 
@@ -310,7 +312,7 @@
       }
 
       if ((temIntencao || temComunicacao) && nomeIntencao) {
-        let dataStr = dataInclusaoIntencao ? ` (data de inclusão ${dataInclusaoIntencao})` : '';
+        let dataStr = dataInclusaoIntencao ? ` (data da inclusão ${dataInclusaoIntencao})` : '';
         if (temIntencao && temComunicacao) {
           mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}${dataStr}\n`;
         } else if (temIntencao) {
@@ -442,7 +444,7 @@
       }
 
       if ((temIntencao || temComunicacao) && nomeIntencao) {
-        let dataStr = dataInclusaoIntencao ? ` (data de inclusão ${dataInclusaoIntencao})` : '';
+        let dataStr = dataInclusaoIntencao ? ` (data da inclusão ${dataInclusaoIntencao})` : '';
         if (temIntencao && temComunicacao) {
           mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}${dataStr}\n`;
         } else if (temIntencao) {
