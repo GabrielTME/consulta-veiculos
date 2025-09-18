@@ -180,6 +180,7 @@
         <div style="display: flex; align-items: center; gap: 8px;">
           <input type="text" id="debitoValor" oninput="atualizarPreview()">
           <input type="checkbox" id="valorColocarEmDia" onchange="atualizarPreview()" style="margin-left:4px;">
+          <input type="checkbox" id="valorDebitoDescricao" onchange="atualizarPreview()" style="margin-left:4px;">
         </div>
       </div>
 
@@ -277,6 +278,7 @@
       const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
       const debitoValor = formatarValor(document.getElementById('debitoValor').value);
       const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
+      const valorDebitoDescricao = document.getElementById('valorDebitoDescricao').checked;
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
@@ -336,6 +338,8 @@
       if (debitosTextos.length > 0) {
         mensagem += `\n`;
         if (valorColocarEmDia && debitoValor) {
+          let debitoMsg = `*${debitoValor}* pra colocar em dia`;
+          if (valorDebitoDescricao) debitoMsg += ' de débito';
           if (debitosTextos.length === 1) {
             mensagem += `${debitosTextos[0]} =\n`;
           } else {
@@ -347,10 +351,12 @@
               }
             }
           }
-          mensagem += `*${debitoValor}* pra colocar em dia\n`;
+          mensagem += debitoMsg + '\n';
         } else if (debitosTextos.length === 1) {
           if (debitoValor) {
-            mensagem += `${debitosTextos[0]} =\n*${debitoValor}*\n`;
+            let debitoMsg = `*${debitoValor}*`;
+            if (valorDebitoDescricao) debitoMsg += ' de débito';
+            mensagem += `${debitosTextos[0]} =\n${debitoMsg}\n`;
           } else {
             mensagem += `${debitosTextos[0]} =\n`;
           }
@@ -363,7 +369,9 @@
             }
           }
           if (debitoValor) {
-            mensagem += `*${debitoValor}*\n`;
+            let debitoMsg = `*${debitoValor}*`;
+            if (valorDebitoDescricao) debitoMsg += ' de débito';
+            mensagem += debitoMsg + '\n';
           }
         }
       } else {
@@ -411,6 +419,7 @@
       const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
       const debitoValor = formatarValor(document.getElementById('debitoValor').value);
       const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
+      const valorDebitoDescricao = document.getElementById('valorDebitoDescricao').checked;
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
@@ -468,6 +477,8 @@
       if (debitosTextos.length > 0) {
         mensagem += `\n`;
         if (valorColocarEmDia && debitoValor) {
+          let debitoMsg = `*${debitoValor}* pra colocar em dia`;
+          if (valorDebitoDescricao) debitoMsg += ' de débito';
           if (debitosTextos.length === 1) {
             mensagem += `${debitosTextos[0]} =\n`;
           } else {
@@ -479,10 +490,12 @@
               }
             }
           }
-          mensagem += `*${debitoValor}* pra colocar em dia\n`;
+          mensagem += debitoMsg + '\n';
         } else if (debitosTextos.length === 1) {
           if (debitoValor) {
-            mensagem += `${debitosTextos[0]} =\n*${debitoValor}*\n`;
+            let debitoMsg = `*${debitoValor}*`;
+            if (valorDebitoDescricao) debitoMsg += ' de débito';
+            mensagem += `${debitosTextos[0]} =\n${debitoMsg}\n`;
           } else {
             mensagem += `${debitosTextos[0]} =\n`;
           }
@@ -495,7 +508,9 @@
             }
           }
           if (debitoValor) {
-            mensagem += `*${debitoValor}*\n`;
+            let debitoMsg = `*${debitoValor}*`;
+            if (valorDebitoDescricao) debitoMsg += ' de débito';
+            mensagem += debitoMsg + '\n';
           }
         }
       } else {
