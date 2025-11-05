@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-Based">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consulta de Veículo</title>
   <style>
@@ -89,7 +89,7 @@
       align-items: center;
       margin-bottom: 6px;
     }
-    .debito-linha input {
+    .debito-linha input[type="text"] {
       flex: 1;
     }
     .plus-button {
@@ -247,13 +247,26 @@
 
     function adicionarDebito() {
       const container = document.getElementById('debitosContainer');
+      const debitosExistentes = container.querySelectorAll('.debito-linha').length;
+
       const linha = document.createElement('div');
       linha.className = 'debito-linha';
+      
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'descricaoDebito';
       input.addEventListener('input', atualizarPreview);
       linha.appendChild(input);
+
+      if (debitosExistentes === 0) {
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = 'veiculoEmDiaCheckbox';
+          checkbox.style.marginLeft = '4px';
+          checkbox.addEventListener('change', atualizarPreview);
+          linha.appendChild(checkbox);
+      }
+
       container.appendChild(linha);
     }
 
@@ -263,6 +276,7 @@
       return 'R$' + numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    // *** FUNÇÃO MODIFICADA (Lógica de débitos) ***
     function atualizarPreview() {
       const marca = document.getElementById('marca').value;
       const modelo = document.getElementById('modelo').value;
@@ -279,6 +293,10 @@
       const debitoValor = formatarValor(document.getElementById('debitoValor').value);
       const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
       const valorDebitoDescricao = document.getElementById('valorDebitoDescricao').checked;
+      
+      const checkboxEl = document.getElementById('veiculoEmDiaCheckbox');
+      const veiculoEmDia = checkboxEl ? checkboxEl.checked : false; 
+      
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
@@ -294,8 +312,9 @@
       if (proprietario) mensagem += `Proprietário ${proprietario}${proprietarioCnpj ? ' (CNPJ)' : ''}\n`;
       if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
       if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
+      
       if (financiamento) {
-        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}\n`;
+        mensagem += `\n*Possui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}*\n`;
       }
       if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
 
@@ -336,7 +355,14 @@
       });
 
       if (debitosTextos.length > 0) {
-        mensagem += `\n`;
+        // Lógica do "Veículo em dia" - CORRIGIDA
+        if (veiculoEmDia) {
+          // \n (quebra normal) + texto + \n\n (linha em branco depois)
+          mensagem += `\nVeículo em dia (2025)\n\n`; 
+        } else {
+          mensagem += `\n`; // Apenas a quebra de linha padrão
+        }
+
         if (valorColocarEmDia && debitoValor) {
           let debitoMsg = `*${debitoValor}* pra colocar em dia`;
           if (valorDebitoDescricao) debitoMsg += ' de débito';
@@ -403,6 +429,7 @@
       document.getElementById('renajudTipo').style.display = temRenajud ? 'block' : 'none';
     }
 
+    // *** FUNÇÃO MODIFICADA (Lógica de débitos) ***
     function copiarMensagem() {
       let mensagem = '';
       const marca = document.getElementById('marca').value;
@@ -420,6 +447,10 @@
       const debitoValor = formatarValor(document.getElementById('debitoValor').value);
       const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
       const valorDebitoDescricao = document.getElementById('valorDebitoDescricao').checked;
+      
+      const checkboxEl = document.getElementById('veiculoEmDiaCheckbox');
+      const veiculoEmDia = checkboxEl ? checkboxEl.checked : false; 
+      
       const temIntencao = document.getElementById('temIntencao').checked;
       const temComunicacao = document.getElementById('temComunicacao').checked;
       const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
@@ -433,8 +464,9 @@
       if (proprietario) mensagem += `Proprietário ${proprietario}${proprietarioCnpj ? ' (CNPJ)' : ''}\n`;
       if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
       if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
+      
       if (financiamento) {
-        mensagem += `\nPossui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}\n`;
+        mensagem += `\n*Possui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}*\n`;
       }
       if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
 
@@ -475,7 +507,14 @@
       });
 
       if (debitosTextos.length > 0) {
-        mensagem += `\n`;
+        // Lógica do "Veículo em dia" - CORRIGIDA
+        if (veiculoEmDia) {
+          // \n (quebra normal) + texto + \n\n (linha em branco depois)
+          mensagem += `\nVeículo em dia (2025)\n\n`; 
+        } else {
+          mensagem += `\n`; // Apenas a quebra de linha padrão
+        }
+        
         if (valorColocarEmDia && debitoValor) {
           let debitoMsg = `*${debitoValor}* pra colocar em dia`;
           if (valorDebitoDescricao) debitoMsg += ' de débito';
