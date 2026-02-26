@@ -1,151 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-Based">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta de Veículo</title>
+  <title>Consulta de Veículo 2.0</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-      min-height: 0;
+    /* FONTE HELVETICA E PALETA RESTAURADA (#222222) */
+    body { margin: 0; font-family: 'Helvetica', 'Arial', sans-serif; display: flex; height: 100vh; min-height: 0; background: #161717; }
+    
+    .form-container { 
+      background: #222222; 
+      color: #f0f0f0;
+      border-right: 1px solid #3d3d3d; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      flex: 1 1 0; 
+      overflow-y: auto; 
+      padding: 30px 20px;
     }
-    .form-container, .preview-container {
-      padding: 20px;
-      flex: 1 1 0;
-      overflow-y: hidden;
-      min-height: 0;
-      box-sizing: border-box;
+    .form-container > div { max-width: 400px; width: 100%; }
+
+    .field-group { margin-bottom: 18px; border-bottom: 1px solid #333; padding-bottom: 14px; }
+    
+    label { 
+      display: block; 
+      font-weight: normal; 
+      margin-bottom: 8px; 
+      color: #7FDB5C; 
+      font-size: 12px; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
     }
-    .form-container {
-      background: #EBEEF0;
-      border-right: 1px solid #ddd;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      min-height: 0;
-      overflow-y: auto;
+    
+    input[type="text"], select { 
+      width: 100%; padding: 12px; border-radius: 6px; 
+      border: 1px solid #444; background: #2d2d2d; color: #fff; 
+      font-size: 14px; transition: border-color 0.3s, box-shadow 0.3s;
     }
-    .form-container > div {
-      max-width: 360px;
-      width: 100%;
+    
+    input[type="text"]:focus, select:focus { 
+      outline: none; border-color: #7FDB5C; box-shadow: 0 0 0 2px rgba(127, 219, 92, 0.2); 
     }
-    .preview-container {
-      background: #161717;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 0;
+
+    .buttons { display: flex; gap: 12px; margin-top: 25px; }
+    button { 
+      flex: 1; padding: 14px; border-radius: 8px; border: none; 
+      font-weight: bold; cursor: pointer; transition: transform 0.1s, background 0.2s; 
     }
-    .whatsapp-message {
-      background: #144D37;
-      color: #e9edef;
-      border-radius: 7.5px;
-      padding: 14px 18px;
-      max-width: 600px;
-      font-size: 18px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    button:active { transform: scale(0.97); }
+    .btn-copiar { background: #7FDB5C; color: #1a1a1a; font-size: 15px; }
+    .btn-limpar { background: #444; color: #ddd; }
+    
+    .plus-button { 
+      background: #7FDB5C; color: #1a1a1a; border-radius: 6px; width: 34px; height: 34px; 
+      display: flex; align-items: center; justify-content: center; border: none; font-size: 22px; margin-top: 8px;
     }
-    .field-group {
-      margin-bottom: 12px;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-    input[type="text"], select {
-      width: 100%;
-      padding: 6px;
-      box-sizing: border-box;
-      font-size: 14px;
-      color: #000;
-    }
-    .inline-checkboxes {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    button {
-      padding: 8px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .debito-linha {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .debito-linha input[type="text"] {
-      flex: 1;
-    }
-    .plus-button {
-      padding: 6px 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #observacaoTexto {
-      margin-top: 6px;
-    }
+
+    .checkbox-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #ccc; cursor: pointer; margin-top: 5px; }
+    input[type="checkbox"] { accent-color: #7FDB5C; width: 18px; height: 18px; cursor: pointer; }
+
+    .preview-container { background: #161717; display: flex; align-items: center; justify-content: center; flex: 1 1 0; min-height: 0; }
+    .whatsapp-message { background: #144D37; color: #e9edef; border-radius: 7.5px; padding: 14px 18px; max-width: 600px; font-size: 18px; line-height: 1.5; white-space: pre-wrap; box-shadow: 0 1px 0.5px rgba(0,0,0,0.13); }
+    #previewMsg b { font-weight: bold; }
+    
+    .debito-linha { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+    .debito-linha input[type="text"] { flex: 1; }
   </style>
-<script defer data-domain="consulta-veiculo.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script><script defer data-domain="consulta-veiculo.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script></head>
+</head>
 <body>
   <div class="form-container">
     <div>
       <div class="field-group">
-        <label>Marca / Modelo / Ano</label>
-        <div style="display: flex; gap: 5px;">
-          <input type="text" id="marca" style="flex: 1;" oninput="atualizarPreview()">
-          <input type="text" id="modelo" style="flex: 1;" oninput="atualizarPreview()">
-          <input type="text" id="ano" style="flex: 1;" oninput="atualizarPreview()">
+        <label>Veículo</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="marca" oninput="atualizarPreview()">
+          <input type="text" id="modelo" oninput="atualizarPreview()">
+          <input type="text" id="ano" oninput="atualizarPreview()">
         </div>
       </div>
 
       <div class="field-group">
         <label>Proprietário</label>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <input type="text" id="proprietario" oninput="atualizarPreview()" style="flex: 1;">
-          <label style="font-weight: normal;">
-            <input type="checkbox" id="proprietarioCnpj" onchange="atualizarPreview()"> CNPJ?
-          </label>
+        <input type="text" id="proprietario" oninput="atualizarPreview()">
+        <label class="checkbox-wrap"><input type="checkbox" id="proprietarioCnpj" onchange="atualizarPreview()"> CNPJ</label>
+      </div>
+
+      <div class="field-group">
+        <label>Município / Procedência</label>
+        <input type="text" id="emplacadoEm" oninput="atualizarPreview()">
+        <label class="checkbox-wrap"><input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior</label>
+        <input type="text" id="emplacadoAnterior" style="display: none; margin-top:8px;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Financiamento</label>
+        <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+          <label class="checkbox-wrap"><input type="checkbox" id="temFinanciamento" onchange="atualizarPreview()"> Possui</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A incluir</label>
+        </div>
+        <div id="financiamentoCampos" style="display: none; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 6px;">
+            <select id="financiamentoSelect" onchange="document.getElementById('financiamentoInfo').value = this.value; atualizarPreview();" style="flex: 1;">
+              <option value="">Banco</option>
+              <option value="Aymoré">Aymoré</option>
+              <option value="Daycoval">Daycoval</option>
+              <option value="PAN">PAN</option>
+              <option value="C6">C6</option>
+              <option value="Votorantim">Votorantim</option>
+              <option value="Sicredi">Sicredi</option>
+              <option value="Sicoob">Sicoob</option>
+              <option value="Digimais">Digimais</option>
+              <option value="Bradesco">Bradesco</option>
+            </select>
+            <input type="text" id="financiamentoInfo" style="flex: 1.5;" oninput="atualizarPreview()">
+          </div>
+          <input type="text" id="dataContrato" oninput="atualizarPreview()">
         </div>
       </div>
 
       <div class="field-group">
-        <label>Emplacado em</label>
-        <input type="text" id="emplacadoEm" oninput="atualizarPreview()">
-      </div>
-
-      <div class="field-group">
-        <label><input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Emplacado anteriormente?</label>
-        <input type="text" id="emplacadoAnterior" style="display: none;" oninput="atualizarPreview()">
-      </div>
-
-      <div class="field-group">
-        <label>
-          <input type="checkbox" id="temFinanciamento" onchange="atualizarPreview()"> Possui financiamento?
-          <input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A ser incluído?
-        </label>
-        <input type="text" id="financiamentoInfo" style="display: none;" oninput="atualizarPreview()">
-        <label id="labelDataContrato" style="display: none; margin-top: 6px;">Data do contrato</label>
-        <input type="text" id="dataContrato" style="display: none;" oninput="atualizarPreview()">
-      </div>
-
-      <div class="field-group">
-        <label><input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui restrição<span title="Restrição judicial ou administrativa">?</span></label>
+        <label>Restrição Judicial / Adm.</label>
+        <label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui</label>
         <select id="renajudTipo" style="display: none;" onchange="atualizarPreview()">
           <option value="transferência">RENAJUD de transferência</option>
           <option value="licenciamento">RENAJUD de licenciamento</option>
@@ -157,15 +133,19 @@
         </select>
       </div>
 
-      <div class="field-group inline-checkboxes">
-        <label><input type="checkbox" id="temIntencao" onchange="atualizarPreview()"> Intenção</label>
-        <label><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunicação</label>
+      <div class="field-group">
+        <label>Venda (Intenção/Comunicação)</label>
+        <div style="display: flex; gap: 20px; margin-bottom: 10px;">
+          <label class="checkbox-wrap"><input type="checkbox" id="temIntencao" onchange="atualizarPreview()"> Intenção</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunic.</label>
+        </div>
+        <input type="text" id="nomeIntencao" style="display: none; margin-bottom:8px;" oninput="atualizarPreview()">
+        <input type="text" id="dataInclusaoIntencao" style="display: none;" oninput="atualizarPreview()">
       </div>
-      <input type="text" id="nomeIntencao" style="display: none;" oninput="atualizarPreview()">
-      <input type="text" id="dataInclusaoIntencao" style="display: none; margin-top: 6px;" oninput="atualizarPreview()">
 
-      <div class="field-group" style="margin-top: 12px;">
-        <label><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Observação?</label>
+      <div class="field-group">
+        <label>Observações</label>
+        <label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Adicionar</label>
         <input type="text" id="observacaoTexto" style="display: none;" oninput="atualizarPreview()">
       </div>
 
@@ -176,439 +156,159 @@
       </div>
 
       <div class="field-group">
-        <label>Valor</label>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <input type="text" id="debitoValor" oninput="atualizarPreview()">
-          <input type="checkbox" id="valorColocarEmDia" onchange="atualizarPreview()" style="margin-left:4px;">
-          <input type="checkbox" id="valorDebitoDescricao" onchange="atualizarPreview()" style="margin-left:4px;">
-        </div>
+        <label>Valor total</label>
+        <input type="text" id="debitoValor" oninput="atualizarPreview()">
       </div>
 
-      <div class="field-group">
+      <div class="field-group" style="border-bottom: none;">
         <label>Multas para entrar no sistema</label>
-        <div style="display: flex; gap: 5px;">
-          <input type="text" id="quantidadeMultas" style="flex: 0.6;" oninput="atualizarPreview()">
-          <input type="text" id="valorMultas" style="flex: 1.4;" placeholder="" oninput="atualizarPreview()">
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="quantidadeMultas" style="flex: 0.5;" oninput="atualizarPreview()">
+          <input type="text" id="valorMultas" style="flex: 1.5;" oninput="atualizarPreview()">
         </div>
       </div>
 
       <div class="buttons">
-        <button onclick="copiarMensagem()">Copiar</button>
-        <button onclick="limparCampos()">Limpar</button>
+        <button class="btn-copiar" onclick="copiarMensagem()">Copiar</button>
+        <button class="btn-limpar" onclick="limparCampos()">Limpar</button>
       </div>
     </div>
   </div>
 
   <div class="preview-container">
-    <div class="whatsapp-message" id="previewMsg">
-      Pré-visualização da mensagem
-    </div>
+    <div class="whatsapp-message" id="previewMsg">Preencha os campos para gerar a consulta...</div>
   </div>
 
   <script>
     function capitalizeWords(str) {
       const dWords = ['de', 'da', 'do', 'das', 'dos'];
-      return str
-        .toLowerCase()
-        .replace(/(?:^|\s|[.])[a-zà-ú]/g, function(match) {
-          return match.toUpperCase();
-        })
-        .replace(/\b([Dd][aeo]s?)\b/g, function(match) {
-          return dWords.includes(match.toLowerCase()) ? match.toLowerCase() : match;
-        });
+      return str.toLowerCase().replace(/(?:^|\s|[.])[a-zà-ú]/g, m => m.toUpperCase())
+                .replace(/\b([Dd][aeo]s?)\b/g, m => dWords.includes(m.toLowerCase()) ? m.toLowerCase() : m);
     }
 
     function formatarProprietario(str) {
       let texto = capitalizeWords(str);
-      texto = texto.replace(/\bltda\b/gi, 'LTDA');
-      // Deixa " E " sozinha como " e "
-      texto = texto.replace(/\bE\b/g, 'e');
+      texto = texto.replace(/\bltda\b/gi, 'LTDA').replace(/\bme\b/gi, 'ME').replace(/\bE\b/g, 'e');
       return texto;
     }
 
     function onInputCapitalize(e) {
       const start = e.target.selectionStart;
       const end = e.target.selectionEnd;
-      let value = e.target.value;
-      if (e.target.id === 'proprietario') {
-        const newValue = formatarProprietario(value);
-        if (value !== newValue) {
-          e.target.value = newValue;
-          e.target.setSelectionRange(start, end);
-        }
-      } else {
-        const newValue = capitalizeWords(value);
-        if (value !== newValue) {
-          e.target.value = newValue;
-          e.target.setSelectionRange(start, end);
-        }
-      }
+      const newValue = (e.target.id === 'proprietario') ? formatarProprietario(e.target.value) : capitalizeWords(e.target.value);
+      if (e.target.value !== newValue) { e.target.value = newValue; e.target.setSelectionRange(start, end); }
     }
 
     function adicionarDebito() {
       const container = document.getElementById('debitosContainer');
-      const debitosExistentes = container.querySelectorAll('.debito-linha').length;
-
+      const count = container.querySelectorAll('.debito-linha').length;
       const linha = document.createElement('div');
       linha.className = 'debito-linha';
-      
       const input = document.createElement('input');
-      input.type = 'text';
-      input.className = 'descricaoDebito';
-      input.addEventListener('input', atualizarPreview);
+      input.type = 'text'; input.className = 'descricaoDebito'; input.addEventListener('input', atualizarPreview);
       linha.appendChild(input);
-
-      if (debitosExistentes === 0) {
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.id = 'veiculoEmDiaCheckbox';
-          checkbox.style.marginLeft = '4px';
-          checkbox.addEventListener('change', atualizarPreview);
-          linha.appendChild(checkbox);
+      if (count === 0) {
+          const cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = 'veiculoEmDiaCheckbox';
+          cb.addEventListener('change', atualizarPreview);
+          linha.appendChild(cb);
       }
-
       container.appendChild(linha);
     }
 
     function formatarValor(valor) {
       const numero = parseFloat(valor.replace(/[^0-9]/g, ''));
-      if (isNaN(numero)) return '';
-      return 'R$' + numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return isNaN(numero) ? '' : 'R$' + numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    // *** FUNÇÃO MODIFICADA (Lógica de débitos) ***
+    function gerarTextoMensagem() {
+      const f = (id) => document.getElementById(id).value;
+      const v = (id) => document.getElementById(id).checked;
+
+      const marca = f('marca'), modelo = f('modelo'), ano = capitalizeWords(f('ano'));
+      const empEm = f('emplacadoEm'), empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
+      const prop = formatarProprietario(f('proprietario')), propCnpj = v('proprietarioCnpj');
+      const finan = v('temFinanciamento') ? f('financiamentoInfo') : '', finanInc = v('financiamentoIncluso'), dataCont = capitalizeWords(f('dataContrato'));
+      const temRen = v('temRenajud'), renTipo = f('renajudTipo');
+      const valTot = formatarValor(f('debitoValor')), qtdMul = parseInt(f('quantidadeMultas') || '0'), valMul = formatarValor(f('valorMultas'));
+      const diaCb = document.getElementById('veiculoEmDiaCheckbox')?.checked;
+      const temInt = v('temIntencao'), temCom = v('temComunicacao'), nomeInt = capitalizeWords(f('nomeIntencao')), dataInt = f('dataInclusaoIntencao');
+      const temObs = v('temObservacao'), obsTxt = f('observacaoTexto');
+
+      let msg = `🚗 *DADOS DO VEÍCULO*\n`;
+      if (marca || modelo || ano) msg += `• *Modelo:* ${marca} ${modelo} ${ano}\n`;
+      if (prop) msg += `• *Proprietário:* ${prop}${propCnpj ? ' (CNPJ)' : ''}\n`;
+      if (empEm) msg += `• *Município:* ${empEm}${empAnt ? ` (Procedência anterior: ${empAnt})` : ''}\n`;
+
+      msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
+      let txtFinan = finan ? `Possui financiamento ${finanInc ? 'a ser incluído' : 'ativo'} (${finan})${dataCont ? `. Contrato de ${dataCont}` : ''}.` : "Não possui";
+      msg += `• *Alienação:* ${txtFinan}\n`;
+
+      let txtRen = "Não possui";
+      if (temRen) {
+        txtRen = renTipo === 'execucao-certidao' ? "Possui restrição de execução por certidão" : 
+                 renTipo === 'administrativa' ? "Possui restrição administrativa" : 
+                 renTipo === 'averbacao' ? "Possui averbação de execução por certidão" : `Consta bloqueio RENAJUD de ${renTipo}`;
+      }
+      msg += `• *Restrição Judicial:* ${txtRen}.\n`;
+
+      let txtVenda = "Não possui";
+      if ((temInt || temCom) && nomeInt) {
+        txtVenda = `${temInt && temCom ? 'Intenção/Comunicação' : temInt ? 'Intenção' : 'Comunicação'} registrada para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}`;
+      }
+      msg += `• *Venda:* ${txtVenda}.\n`;
+
+      if (temObs && obsTxt) msg += `\n🔍 *OBSERVAÇÕES*\n• ${obsTxt}\n`;
+
+      msg += `\n💰 *DÉBITOS*\n`;
+      const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(v => v);
+      if (diaCb) msg += `Veículo em dia (2026)\n\n`;
+
+      if (debs.length > 0) {
+        debs.forEach((d, i) => msg += `• ${d}${i === debs.length - 1 ? ' =' : ' +'}\n`);
+        if (valTot) msg += `• *VALOR TOTAL:* ${valTot}\n`;
+      } else {
+        msg += `• Sem débitos, veículo em dia (2026)\n`;
+      }
+
+      if (qtdMul > 0) {
+        let txtM = qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`;
+        msg += `\n${txtM}${valMul ? ` (valor total de ${valMul})` : ''}\n`;
+      }
+
+      return msg.trim();
+    }
+
     function atualizarPreview() {
-      const marca = document.getElementById('marca').value;
-      const modelo = document.getElementById('modelo').value;
-      const ano = capitalizeWords(document.getElementById('ano').value);
-      const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : '';
-      const proprietario = formatarProprietario(document.getElementById('proprietario').value);
-      const proprietarioCnpj = document.getElementById('proprietarioCnpj').checked;
-      const emplacadoEm = document.getElementById('emplacadoEm').value;
-      const financiamento = document.getElementById('temFinanciamento').checked ? document.getElementById('financiamentoInfo').value : '';
-      const financiamentoIncluso = document.getElementById('financiamentoIncluso').checked;
-      const dataContrato = capitalizeWords(document.getElementById('dataContrato').value);
-      const temRenajud = document.getElementById('temRenajud').checked;
-      const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
-      const debitoValor = formatarValor(document.getElementById('debitoValor').value);
-      const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
-      const valorDebitoDescricao = document.getElementById('valorDebitoDescricao').checked;
+      const m = gerarTextoMensagem();
+      document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
+      const v = (id) => document.getElementById(id).checked;
       
-      const checkboxEl = document.getElementById('veiculoEmDiaCheckbox');
-      const veiculoEmDia = checkboxEl ? checkboxEl.checked : false; 
-      
-      const temIntencao = document.getElementById('temIntencao').checked;
-      const temComunicacao = document.getElementById('temComunicacao').checked;
-      const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
-      const dataInclusaoIntencao = document.getElementById('dataInclusaoIntencao').value;
-      const temObs = document.getElementById('temObservacao').checked;
-      const obsTexto = document.getElementById('observacaoTexto').value;
-      const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
-      const valorMultas = formatarValor(document.getElementById('valorMultas').value);
-
-      let mensagem = '';
-
-      if (marca || modelo || ano) mensagem += `*${marca} ${modelo} ${ano}*\n`;
-      if (proprietario) mensagem += `Proprietário ${proprietario}${proprietarioCnpj ? ' (CNPJ)' : ''}\n`;
-      if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
-      if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
-      
-      if (financiamento) {
-        mensagem += `\n*Possui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}*\n`;
-      }
-      if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
-
-      if (temRenajud && renajud) {
-        if (renajud === 'execucao-certidao') {
-          mensagem += `\n*Possui uma restrição de execução por certidão*\n`;
-        } else if (renajud === 'administrativa') {
-          mensagem += `\n*Possui restrição administrativa*\n`;
-        } else if (renajud === 'averbacao') {
-          mensagem += `\n*Possui uma averbação de execução por certidão*\n`;
-        } else {
-          mensagem += `\n*Possui RENAJUD de ${renajud}*\n`;
-        }
-      } else {
-        mensagem += `\nNão possui restrição judicial ou administrativa\n`;
-      }
-
-      if ((temIntencao || temComunicacao) && nomeIntencao) {
-        let dataStr = dataInclusaoIntencao ? ` (data da inclusão ${dataInclusaoIntencao})` : '';
-        if (temIntencao && temComunicacao) {
-          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}${dataStr}\n`;
-        } else if (temIntencao) {
-          mensagem += `\nPossui intenção de venda para ${nomeIntencao}${dataStr}\n`;
-        } else if (temComunicacao) {
-          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}${dataStr}\n`;
-        }
-      }
-
-      if (temObs && obsTexto) {
-        mensagem += `\n${obsTexto}\n`;
-      }
-
-      const descricoes = document.querySelectorAll('.descricaoDebito');
-      let debitosTextos = [];
-      descricoes.forEach(input => {
-        const valor = input.value.trim();
-        if (valor) debitosTextos.push(valor);
-      });
-
-      if (debitosTextos.length > 0) {
-        // Lógica do "Veículo em dia" - CORRIGIDA
-        if (veiculoEmDia) {
-          // \n (quebra normal) + texto + \n\n (linha em branco depois)
-          mensagem += `\nVeículo em dia (2025)\n\n`; 
-        } else {
-          mensagem += `\n`; // Apenas a quebra de linha padrão
-        }
-
-        if (valorColocarEmDia && debitoValor) {
-          let debitoMsg = `*${debitoValor}* pra colocar em dia`;
-          if (valorDebitoDescricao) debitoMsg += ' de débito';
-          if (debitosTextos.length === 1) {
-            mensagem += `${debitosTextos[0]} =\n`;
-          } else {
-            for (let i = 0; i < debitosTextos.length; i++) {
-              if (i === debitosTextos.length - 1) {
-                mensagem += `${debitosTextos[i]} =\n`;
-              } else {
-                mensagem += `${debitosTextos[i]} +\n`;
-              }
-            }
-          }
-          mensagem += debitoMsg + '\n';
-        } else if (debitosTextos.length === 1) {
-          if (debitoValor) {
-            let debitoMsg = `*${debitoValor}*`;
-            if (valorDebitoDescricao) debitoMsg += ' de débito';
-            mensagem += `${debitosTextos[0]} =\n${debitoMsg}\n`;
-          } else {
-            mensagem += `${debitosTextos[0]} =\n`;
-          }
-        } else {
-          for (let i = 0; i < debitosTextos.length; i++) {
-            if (i === debitosTextos.length - 1) {
-              mensagem += `${debitosTextos[i]} =\n`;
-            } else {
-              mensagem += `${debitosTextos[i]} +\n`;
-            }
-          }
-          if (debitoValor) {
-            let debitoMsg = `*${debitoValor}*`;
-            if (valorDebitoDescricao) debitoMsg += ' de débito';
-            mensagem += debitoMsg + '\n';
-          }
-        }
-      } else {
-        mensagem += `\nSem débitos, veículo em dia (2026)\n`;
-      }
-
-      if (!isNaN(qtdMultas)) {
-        if (qtdMultas <= 0) {
-          mensagem += `\nSem multas para entrar no sistema`;
-        } else if (qtdMultas === 1) {
-          mensagem += `\n*1* multa que ainda não caiu no sistema${valorMultas ? ` (valor de ${valorMultas})` : ''}`;
-        } else {
-          mensagem += `\n*${qtdMultas}* multas que ainda não caíram no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
-        }
-      }
-
-      function renderNegrito(texto) {
-        return texto.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
-      }
-      document.getElementById('previewMsg').innerHTML = renderNegrito(mensagem.trim() || 'Pré-visualização da mensagem');
-
-      document.getElementById('nomeIntencao').style.display = (temIntencao || temComunicacao) ? 'block' : 'none';
-      document.getElementById('dataInclusaoIntencao').style.display = (temIntencao || temComunicacao) ? 'block' : 'none';
-      document.getElementById('observacaoTexto').style.display = temObs ? 'block' : 'none';
-      document.getElementById('emplacadoAnterior').style.display = document.getElementById('temAnterior').checked ? 'block' : 'none';
-      document.getElementById('financiamentoInfo').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
-      document.getElementById('dataContrato').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
-      document.getElementById('labelDataContrato').style.display = document.getElementById('temFinanciamento').checked ? 'block' : 'none';
-      document.getElementById('renajudTipo').style.display = temRenajud ? 'block' : 'none';
+      document.getElementById('nomeIntencao').style.display = document.getElementById('dataInclusaoIntencao').style.display = (v('temIntencao') || v('temComunicacao')) ? 'block' : 'none';
+      document.getElementById('observacaoTexto').style.display = v('temObservacao') ? 'block' : 'none';
+      document.getElementById('emplacadoAnterior').style.display = v('temAnterior') ? 'block' : 'none';
+      document.getElementById('financiamentoCampos').style.display = v('temFinanciamento') ? 'flex' : 'none';
+      document.getElementById('renajudTipo').style.display = v('temRenajud') ? 'block' : 'none';
     }
 
-    // *** FUNÇÃO MODIFICADA (Lógica de débitos) ***
     function copiarMensagem() {
-      let mensagem = '';
-      const marca = document.getElementById('marca').value;
-      const modelo = document.getElementById('modelo').value;
-      const ano = capitalizeWords(document.getElementById('ano').value);
-      const emplacadoAnterior = document.getElementById('temAnterior').checked ? document.getElementById('emplacadoAnterior').value : '';
-      const proprietario = formatarProprietario(document.getElementById('proprietario').value);
-      const proprietarioCnpj = document.getElementById('proprietarioCnpj').checked;
-      const emplacadoEm = document.getElementById('emplacadoEm').value;
-      const financiamento = document.getElementById('temFinanciamento').checked ? document.getElementById('financiamentoInfo').value : '';
-      const financiamentoIncluso = document.getElementById('financiamentoIncluso').checked;
-      const dataContrato = capitalizeWords(document.getElementById('dataContrato').value);
-      const temRenajud = document.getElementById('temRenajud').checked;
-      const renajud = temRenajud ? document.getElementById('renajudTipo').value.toLowerCase() : '';
-      const debitoValor = formatarValor(document.getElementById('debitoValor').value);
-      const valorColocarEmDia = document.getElementById('valorColocarEmDia').checked;
-      const valorDebitoDescricao = document.getElementById('valorDebitoDescricao').checked;
-      
-      const checkboxEl = document.getElementById('veiculoEmDiaCheckbox');
-      const veiculoEmDia = checkboxEl ? checkboxEl.checked : false; 
-      
-      const temIntencao = document.getElementById('temIntencao').checked;
-      const temComunicacao = document.getElementById('temComunicacao').checked;
-      const nomeIntencao = capitalizeWords(document.getElementById('nomeIntencao').value);
-      const dataInclusaoIntencao = document.getElementById('dataInclusaoIntencao').value;
-      const temObs = document.getElementById('temObservacao').checked;
-      const obsTexto = document.getElementById('observacaoTexto').value;
-      const qtdMultas = parseInt(document.getElementById('quantidadeMultas').value || '0');
-      const valorMultas = formatarValor(document.getElementById('valorMultas').value);
-
-      if (marca || modelo || ano) mensagem += `*${marca} ${modelo} ${ano}*\n`;
-      if (proprietario) mensagem += `Proprietário ${proprietario}${proprietarioCnpj ? ' (CNPJ)' : ''}\n`;
-      if (emplacadoEm) mensagem += `Emplacado em ${emplacadoEm}\n`;
-      if (emplacadoAnterior) mensagem += `\nEmplacado anteriormente em ${emplacadoAnterior}\n`;
-      
-      if (financiamento) {
-        mensagem += `\n*Possui financiamento${financiamentoIncluso ? ' a ser incluído' : ''} em favor do banco ${financiamento}*\n`;
-      }
-      if (dataContrato) mensagem += `Data do contrato ${dataContrato}\n`;
-
-      if (temRenajud && renajud) {
-        if (renajud === 'execucao-certidao') {
-          mensagem += `\nPossui uma restrição de execução por certidão\n`;
-        } else if (renajud === 'administrativa') {
-          mensagem += `\n*Possui restrição administrativa*\n`;
-        } else if (renajud === 'averbacao') {
-          mensagem += `\n*Possui uma averbação de execução por certidão*\n`;
-        } else {
-          mensagem += `\n*Possui RENAJUD de ${renajud}*\n`;
-        }
-      } else {
-        mensagem += `\nNão possui restrição judicial ou administrativa\n`;
-      }
-
-      if ((temIntencao || temComunicacao) && nomeIntencao) {
-        let dataStr = dataInclusaoIntencao ? ` (data da inclusão ${dataInclusaoIntencao})` : '';
-        if (temIntencao && temComunicacao) {
-          mensagem += `\nPossui intenção e comunicação de venda para ${nomeIntencao}${dataStr}\n`;
-        } else if (temIntencao) {
-          mensagem += `\nPossui intenção de venda para ${nomeIntencao}${dataStr}\n`;
-        } else if (temComunicacao) {
-          mensagem += `\nPossui comunicação de venda para ${nomeIntencao}${dataStr}\n`;
-        }
-      }
-
-      if (temObs && obsTexto) {
-        mensagem += `\n${obsTexto}\n`;
-      }
-
-      const descricoes = document.querySelectorAll('.descricaoDebito');
-      let debitosTextos = [];
-      descricoes.forEach(input => {
-        const valor = input.value.trim();
-        if (valor) debitosTextos.push(valor);
-      });
-
-      if (debitosTextos.length > 0) {
-        // Lógica do "Veículo em dia" - CORRIGIDA
-        if (veiculoEmDia) {
-          // \n (quebra normal) + texto + \n\n (linha em branco depois)
-          mensagem += `\nVeículo em dia (2025)\n\n`; 
-        } else {
-          mensagem += `\n`; // Apenas a quebra de linha padrão
-        }
-        
-        if (valorColocarEmDia && debitoValor) {
-          let debitoMsg = `*${debitoValor}* pra colocar em dia`;
-          if (valorDebitoDescricao) debitoMsg += ' de débito';
-          if (debitosTextos.length === 1) {
-            mensagem += `${debitosTextos[0]} =\n`;
-          } else {
-            for (let i = 0; i < debitosTextos.length; i++) {
-              if (i === debitosTextos.length - 1) {
-                mensagem += `${debitosTextos[i]} =\n`;
-              } else {
-                mensagem += `${debitosTextos[i]} +\n`;
-              }
-            }
-          }
-          mensagem += debitoMsg + '\n';
-        } else if (debitosTextos.length === 1) {
-          if (debitoValor) {
-            let debitoMsg = `*${debitoValor}*`;
-            if (valorDebitoDescricao) debitoMsg += ' de débito';
-            mensagem += `${debitosTextos[0]} =\n${debitoMsg}\n`;
-          } else {
-            mensagem += `${debitosTextos[0]} =\n`;
-          }
-        } else {
-          for (let i = 0; i < debitosTextos.length; i++) {
-            if (i === debitosTextos.length - 1) {
-              mensagem += `${debitosTextos[i]} =\n`;
-            } else {
-              mensagem += `${debitosTextos[i]} +\n`;
-            }
-          }
-          if (debitoValor) {
-            let debitoMsg = `*${debitoValor}*`;
-            if (valorDebitoDescricao) debitoMsg += ' de débito';
-            mensagem += debitoMsg + '\n';
-          }
-        }
-      } else {
-        mensagem += `\nSem débitos, veículo em dia (2026)\n`;
-      }
-
-      if (!isNaN(qtdMultas)) {
-        if (qtdMultas <= 0) {
-          mensagem += `\nSem multas para entrar no sistema`;
-        } else if (qtdMultas === 1) {
-          mensagem += `\n*1* multa que ainda não caiu no sistema${valorMultas ? ` (valor de ${valorMultas})` : ''}`;
-        } else {
-          mensagem += `\n*${qtdMultas}* multas que ainda não caíram no sistema${valorMultas ? ` (valor total de ${valorMultas})` : ''}`;
-        }
-      }
-
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(mensagem.trim()).then(() => alert('Mensagem copiada'));
-      } else {
-        const textarea = document.createElement('textarea');
-        textarea.value = mensagem.trim();
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-          document.execCommand('copy');
-          alert('Mensagem copiada');
-        } catch (err) {
-          alert('Não foi possível copiar a mensagem');
-        }
-        document.body.removeChild(textarea);
-      }
+      const m = gerarTextoMensagem();
+      navigator.clipboard.writeText(m).then(() => alert('✓ Copiado!'));
     }
 
     function limparCampos() {
-      document.querySelectorAll('input[type="text"]').forEach(input => {
-        input.value = '';
-      });
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-      document.querySelectorAll('select').forEach(sel => sel.value = sel.options[0].value);
+      document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+      document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+      document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
       document.getElementById('debitosContainer').innerHTML = '';
-      document.getElementById('dataInclusaoIntencao').value = '';
-      adicionarDebito();
+      for(let i=0; i<5; i++) adicionarDebito();
       atualizarPreview();
     }
 
     window.onload = () => {
-      document.querySelectorAll('input[type="text"]').forEach(input => {
-        if (
-          input.id !== 'marca' &&
-          input.id !== 'modelo' &&
-          input.id !== 'observacaoTexto' &&
-          input.id !== 'financiamentoInfo' &&
-          input.id !== 'emplacadoAnterior' &&
-          input.id !== 'emplacadoEm'
-        ) {
-          input.addEventListener('input', onInputCapitalize);
-        }
+      document.querySelectorAll('input[type="text"]').forEach(i => {
+        if (!['marca','modelo','observacaoTexto','financiamentoInfo','emplacadoAnterior','emplacadoEm','quantidadeMultas','valorMultas'].includes(i.id)) i.addEventListener('input', onInputCapitalize);
       });
-      adicionarDebito();
+      for(let i=0; i<5; i++) adicionarDebito();
       atualizarPreview();
     };
   </script>
