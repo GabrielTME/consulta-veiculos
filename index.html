@@ -240,12 +240,10 @@
 
       msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
       
-      // Alienação FORMATADA
       let statusFinan = finanInc ? "a ser incluído" : "ativo";
       let txtFinan = finan ? `Possui financiamento ${statusFinan} (Banco *${finan}*${dataCont ? ', contrato de ' + dataCont : ''})` : "Não possui";
       msg += `• *Alienação:* ${txtFinan}\n`;
 
-      // Restrição Judicial sem ponto e com emoji
       let txtRen = "Não possui";
       if (temRen) {
         txtRen = renTipo === 'execucao-certidao' ? "Possui restrição de execução por certidão" : 
@@ -255,7 +253,6 @@
       }
       msg += `• *Restrição Judicial:* ${txtRen}\n`;
 
-      // Venda sem ponto
       let txtVenda = "Não possui";
       if ((temInt || temCom) && nomeInt) {
         txtVenda = `${temInt && temCom ? 'Intenção/Comunicação' : temInt ? 'Intenção' : 'Comunicação'} registrada para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}`;
@@ -267,6 +264,8 @@
       msg += `\n💰 *DÉBITOS*\n`;
       const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(v => v);
       
+      const hasMultas = qtdMul > 0;
+
       if (debs.length > 0) {
         debs.forEach((d, i) => {
             const isLastLine = (i === debs.length - 1);
@@ -277,10 +276,8 @@
         msg += `• Sem débitos, veículo em dia (2026)\n`;
       }
 
-      // Checkbox manual
       if (diaCb) msg += `\nVeículo em dia (2025)\n`;
 
-      // Multas para entrar no sistema SEPARADAS
       if (qtdMul > 0) {
         let txtM = qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`;
         msg += `\n${txtM}${valMul ? ` (valor total de ${valMul})` : ''}\n`;
@@ -303,7 +300,7 @@
 
     function copiarMensagem() {
       const m = gerarTextoMensagem();
-      navigator.clipboard.writeText(m).then(() => alert('✓ Copiado!'));
+      navigator.clipboard.writeText(m).then(() => alert('✅'));
     }
 
     function limparCampos() {
@@ -311,7 +308,7 @@
       document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
       document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
       document.getElementById('debitosContainer').innerHTML = '';
-      for(let i=0; i<5; i++) adicionarDebito();
+      for(let i=0; i<3; i++) adicionarDebito();
       atualizarPreview();
     }
 
@@ -319,7 +316,7 @@
       document.querySelectorAll('input[type="text"]').forEach(i => {
         if (!['marca','modelo','observacaoTexto','financiamentoInfo','emplacadoAnterior','emplacadoEm','quantidadeMultas','valorMultas'].includes(i.id)) i.addEventListener('input', onInputCapitalize);
       });
-      for(let i=0; i<5; i++) adicionarDebito();
+      for(let i=0; i<3; i++) adicionarDebito();
       atualizarPreview();
     };
   </script>
