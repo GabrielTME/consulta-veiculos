@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consulta de Veículo 2.0</title>
   <style>
-    /* FONTE HELVETICA E PALETA RESTAURADA (#222222) */
     body { margin: 0; font-family: 'Helvetica', 'Arial', sans-serif; display: flex; height: 100vh; min-height: 0; background: #161717; }
     
     .form-container { 
@@ -240,7 +239,7 @@
       if (empEm) msg += `• *Município:* ${empEm}${empAnt ? ` (Procedência anterior: ${empAnt})` : ''}\n`;
 
       msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
-      let txtFinan = finan ? `Possui financiamento ${finanInc ? 'a ser incluído' : 'ativo'} (${finan})${dataCont ? `. Contrato de ${dataCont}` : ''}.` : "Não possui";
+      let txtFinan = finan ? `Possui financiamento ${finanInc ? 'a ser incluído' : 'ativo'} (*${finan}*)${dataCont ? `. Contrato de ${dataCont}` : ''}.` : "Não possui";
       msg += `• *Alienação:* ${txtFinan}\n`;
 
       let txtRen = "Não possui";
@@ -261,19 +260,27 @@
 
       msg += `\n💰 *DÉBITOS*\n`;
       const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(v => v);
-      if (diaCb) msg += `Veículo em dia (2026)\n\n`;
+      
+      const hasMultas = qtdMul > 0;
 
-      if (debs.length > 0) {
-        debs.forEach((d, i) => msg += `• ${d}${i === debs.length - 1 ? ' =' : ' +'}\n`);
+      if (debs.length > 0 || hasMultas) {
+        debs.forEach((d, i) => {
+            const isLastLine = (i === debs.length - 1) && !hasMultas;
+            msg += `• ${d}${isLastLine ? ' =' : ' +'}\n`;
+        });
+
+        if (hasMultas) {
+            let txtM = qtdMul === 1 ? '1 multa vencida' : `${qtdMul} multas vencidas`;
+            msg += `• ${txtM} =\n`;
+        }
+
         if (valTot) msg += `• *VALOR TOTAL:* ${valTot}\n`;
       } else {
         msg += `• Sem débitos, veículo em dia (2026)\n`;
       }
 
-      if (qtdMul > 0) {
-        let txtM = qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`;
-        msg += `\n${txtM}${valMul ? ` (valor total de ${valMul})` : ''}\n`;
-      }
+      // AJUSTADO: Veículo em dia (2025) movido para o final da lista de débitos
+      if (diaCb) msg += `\nVeículo em dia (2025)\n`;
 
       return msg.trim();
     }
