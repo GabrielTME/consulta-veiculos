@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consulta de Veículo 2.0</title>
+  
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMTGKCBbOAAAAuGVYSWZJSSoACAAAAAUAGgEFAAEAAABKAAAAGwEFAAEAAABSAAAAKAEDAAEAAAADAAAAMQECABEAAABaAAAAaYcEAAEAAABsAAAAAAAAAJOTAADoAwAAk5MAAOgDAABQYWludC5ORVQgNS4xLjExAAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlgAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABcUYo7t3MiWAAABDdJREFUWEfFl0tsFWUUx39n2gYpJgqYVIIhkvD5ADYYiI0pReLCTTVCdAHO8BB14UJJEONC+s3ACouiiUbRII8ZG4hEJRBjIEEeIYak1hjFYL6GBVGhPlBBA4WUz0Vn2unpvW0pJv6Su7j//5k5Z8797rnnCtdJ7KImj38VmAaMy+WLwDngO+ALQQ7FJu1Wl1ZEtKCJXXSvUPOPNdvPAKxzSySgpgV4B5iq43N+Bz4GeSMx6ffaLFO1gNgtq/dci4HngcvADmBjYrKfAawLpwC7gfn62hKXgTcFSWKTXtIm1QqwLrobfDtwn7J+AdYkJssAWt2TEwTZCzyk4jQdIEsTkzptDCkgdtFcj98PNGivRFtispcA1nc9NanXX9kLNAK1OrDEWaAlMVlnWRxUQP7kR0ZIniObEpOuBdjQtaqu11+Z7vHzgWVAs47OOQuyoNyJ/gJiF9V7/LEKbR+O5YnJdmrRurAFeA24S3tAhyDNxZkICtXj4yrJdwNLgAvaAF6PXTRNi4nJ9gtyP7BPe8Bcj7fFm4C+1s/KT7vm01qpW5qYbBfIE8AV5U/2+FalARCb9M8aqV1UpYgXrItmMtABv7o0VApOCbJi3Yxt1wASkx4AXlQxACuti2ZrEaB1xvZeQZYD+vTflOcksC66HVisAgDWxCb9qyyMDya8BewCTgHf5q/T4B8ox5WJTfpHlcIXxy5qEOvCJUC7Mo8kJntQaf1YF9YCPn8rgCQmu6rCBmFdeAxoUvJSsS58D3hGGasSk32gtBvCuvBZYIuS3w8A/fldEuSQ0m4YQY6WulYwR6wLTwPTS2IPcBy4qgfVMIwD3k5M9pE2CmIX1Xl8cx7r83v/LdaFvwK36QvGwMbEZC9rcST6B9H/RZAvE/8FY7pPAPymxTHyoxZGg1gXzgPuAHq1OQybADNYksbEpCcGawNYFz4GPJcfcvqmIXtGe8r7iV10p8efBOpL8k+CzNKTs4x14XFAT8yV130IPX6tSg5weITkj1ZIfl6QzyUPmAnMy7/7BV6Qz8o3ti5qBH8UqCvFATycmOyA0qCvYxM9/sTQj4yticmeLjowHtgOfFh6tXv8tg1dfV2KXTQZ/NYKyb8cH9x8UGkArO9aUePxOyok7wHZTHnSWRe2VfnV2iPIKx6/BVigzWpPH7voVo/fCTyivfJO2X8GBLHA14PC+njc47+pkvzdSsmtC1vytldK3ikEcfFGL6X3gD88uqWUrwKChdbsvBi7ZRPATx3FUtqdL6U/FMKQr2E+F/aNoohu4Ey+ik8EplTYqsp0C9ISm7SjLA4pgIFOtANztDdGOvM/Jv1PXlBxDiQmPSVIUz7xisk1FnqANiGYXyk51TpQxrpwNrAaWARM0n4VzgOfgGxOTHpSm2VGLKDAumgK+IXAwnyLagBuyZeLC/mZKP89P6fvUYl/AU+EZ2F2S8GBAAAAAElFTkSuQmCC">
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body { margin: 0; font-family: 'Helvetica', 'Arial', sans-serif; display: flex; height: 100vh; min-height: 0; background: #161717; }
     
-    /* PAINEL DA ESQUERDA */
     .form-container { 
       background: #222B3D; 
       color: #f0f0f0;
@@ -45,9 +47,17 @@
     .btn-copiar { background: #2563eb; }
     .btn-copiar:hover { background: #1d4ed8; }
     .btn-limpar { background: #2d3a54; }
-    .plus-button { background: #2563eb; border-radius: 6px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: none; font-size: 22px; margin-top: 8px; }
+    
+    .plus-button { 
+      background: #2563eb; border-radius: 6px; width: 34px; height: 34px; 
+      display: flex; align-items: center; justify-content: center; border: none; 
+      font-size: 22px; margin-top: 8px; color: #ffffff;
+    }
 
-    .checkbox-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #94a3b8; cursor: pointer; margin-top: 5px; font-weight: 700; }
+    .checkbox-wrap { 
+      display: flex; align-items: center; gap: 8px; font-size: 13px; 
+      color: #94a3b8; cursor: pointer; margin-top: 5px; font-weight: 700; 
+    }
     input[type="checkbox"] { accent-color: #2563eb; width: 18px; height: 18px; }
 
     .preview-container { background: #161717; display: flex; align-items: center; justify-content: center; flex: 1 1 0; }
@@ -60,22 +70,115 @@
 <body>
   <div class="form-container">
     <div>
-      <div class="field-group"><label>Veículo</label><div style="display: flex; gap: 6px;"><input type="text" id="marca" oninput="atualizarPreview()"><input type="text" id="modelo" oninput="atualizarPreview()"><input type="text" id="ano" oninput="atualizarPreview()"></div></div>
-      <div class="field-group"><label>Proprietário</label><input type="text" id="proprietario" oninput="atualizarPreview()"><label class="checkbox-wrap"><input type="checkbox" id="proprietarioCnpj" onchange="atualizarPreview()"> CNPJ</label></div>
-      <div class="field-group"><label>Município / Procedência</label><input type="text" id="emplacadoEm" oninput="atualizarPreview()"><label class="checkbox-wrap"><input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior</label><input type="text" id="emplacadoAnterior" style="display: none; margin-top:8px;" oninput="atualizarPreview()"></div>
-      <div class="field-group"><label>Financiamento</label><div style="display: flex; gap: 15px; margin-bottom: 10px;"><label class="checkbox-wrap"><input type="checkbox" id="temFinanciamento" onchange="atualizarPreview()"> Possui</label><label class="checkbox-wrap"><input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A incluir</label></div><div id="financiamentoCampos" style="display: none; flex-direction: column; gap: 8px;"><div style="display: flex; gap: 6px;"><select id="financiamentoSelect" onchange="document.getElementById('financiamentoInfo').value = this.value; atualizarPreview();" style="flex: 1;"><option value="">Banco</option><option value="Aymoré">Aymoré</option><option value="Daycoval">Daycoval</option><option value="PAN">PAN</option><option value="C6">C6</option><option value="Votorantim">Votorantim</option><option value="Sicredi">Sicredi</option><option value="Sicoob">Sicoob</option><option value="Digimais">Digimais</option><option value="Bradesco">Bradesco</option></select><input type="text" id="financiamentoInfo" style="flex: 1.5;" oninput="atualizarPreview()"></div><input type="text" id="dataContrato" oninput="atualizarPreview()"></div></div>
-      <div class="field-group"><label>Restrição Judicial / Adm.</label><label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui</label><select id="renajudTipo" style="display: none;" onchange="atualizarPreview()"><option value="transferência">RENAJUD de transferência</option><option value="licenciamento">RENAJUD de licenciamento</option><option value="circulação">RENAJUD de circulação</option><option value="penhora">RENAJUD de penhora</option><option value="execucao-certidao">Execução por certidão</option><option value="administrativa">Administrativa</option><option value="averbacao">Averbação</option></select></div>
-      <div class="field-group"><label>Venda (Intenção/Comunicação)</label><div style="display: flex; gap: 20px; margin-bottom: 10px;"><label class="checkbox-wrap"><input type="checkbox" id="temIntencao" onchange="atualizarPreview()"> Intenção</label><label class="checkbox-wrap"><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunic.</label></div><input type="text" id="nomeIntencao" style="display: none; margin-bottom:8px;" oninput="atualizarPreview()"><input type="text" id="dataInclusaoIntencao" style="display: none;" oninput="atualizarPreview()"></div>
-      <div class="field-group"><label>Observações</label><label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Adicionar</label><input type="text" id="observacaoTexto" style="display: none;" oninput="atualizarPreview()"></div>
-      <div class="field-group"><label>Débitos</label><div id="debitosContainer"></div><button class="plus-button" type="button" onclick="adicionarDebito()">+</button></div>
-      <div class="field-group"><label>Valor total</label><input type="text" id="debitoValor" oninput="atualizarPreview()"></div>
-      <div class="field-group" style="border-bottom: none;"><label>Multas para entrar no sistema</label><div style="display: flex; gap: 6px;"><input type="text" id="quantidadeMultas" style="flex: 0.5;" oninput="atualizarPreview()"><input type="text" id="valorMultas" style="flex: 1.5;" oninput="atualizarPreview()"></div></div>
-      <div class="buttons"><button class="btn-copiar" onclick="copiarMensagem()">Copiar</button><button class="btn-limpar" onclick="limparCampos()">Limpar</button></div>
+      <div class="field-group">
+        <label>Veículo</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="marca" oninput="atualizarPreview()">
+          <input type="text" id="modelo" oninput="atualizarPreview()">
+          <input type="text" id="ano" oninput="atualizarPreview()">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Proprietário</label>
+        <input type="text" id="proprietario" oninput="atualizarPreview()">
+        <label class="checkbox-wrap"><input type="checkbox" id="proprietarioCnpj" onchange="atualizarPreview()"> CNPJ</label>
+      </div>
+
+      <div class="field-group">
+        <label>Município / Procedência</label>
+        <input type="text" id="emplacadoEm" oninput="atualizarPreview()">
+        <label class="checkbox-wrap"><input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior</label>
+        <input type="text" id="emplacadoAnterior" style="display: none; margin-top:8px;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Financiamento</label>
+        <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+          <label class="checkbox-wrap"><input type="checkbox" id="temFinanciamento" onchange="atualizarPreview()"> Possui</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="financiamentoIncluso" onchange="atualizarPreview()"> A incluir</label>
+        </div>
+        <div id="financiamentoCampos" style="display: none; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 6px;">
+            <select id="financiamentoSelect" onchange="document.getElementById('financiamentoInfo').value = this.value; atualizarPreview();" style="flex: 1;">
+              <option value="">Banco</option>
+              <option value="Aymoré">Aymoré</option>
+              <option value="Daycoval">Daycoval</option>
+              <option value="PAN">PAN</option>
+              <option value="C6">C6</option>
+              <option value="Votorantim">Votorantim</option>
+              <option value="Sicredi">Sicredi</option>
+              <option value="Sicoob">Sicoob</option>
+              <option value="Digimais">Digimais</option>
+              <option value="Bradesco">Bradesco</option>
+            </select>
+            <input type="text" id="financiamentoInfo" style="flex: 1.5;" oninput="atualizarPreview()">
+          </div>
+          <input type="text" id="dataContrato" oninput="atualizarPreview()">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Restrição Judicial / Adm.</label>
+        <label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui</label>
+        <select id="renajudTipo" style="display: none;" onchange="atualizarPreview()">
+          <option value="transferência">RENAJUD de transferência</option>
+          <option value="licenciamento">RENAJUD de licenciamento</option>
+          <option value="circulação">RENAJUD de circulação</option>
+          <option value="penhora">RENAJUD de penhora</option>
+          <option value="execucao-certidao">Execução por certidão</option>
+          <option value="administrativa">Administrativa</option>
+          <option value="averbacao">Averbação</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>Venda (Intenção/Comunicação)</label>
+        <div style="display: flex; gap: 20px; margin-bottom: 10px;">
+          <label class="checkbox-wrap"><input type="checkbox" id="temIntencao" onchange="atualizarPreview()"> Intenção</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunic.</label>
+        </div>
+        <input type="text" id="nomeIntencao" style="display: none; margin-bottom:8px;" oninput="atualizarPreview()">
+        <input type="text" id="dataInclusaoIntencao" style="display: none;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Observações</label>
+        <label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Adicionar</label>
+        <input type="text" id="observacaoTexto" style="display: none;" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group">
+        <label>Débitos</label>
+        <div id="debitosContainer"></div>
+        <button class="plus-button" type="button" onclick="adicionarDebito()">+</button>
+      </div>
+
+      <div class="field-group">
+        <label>Valor total</label>
+        <input type="text" id="debitoValor" oninput="atualizarPreview()">
+      </div>
+
+      <div class="field-group" style="border-bottom: none;">
+        <label>Multas para entrar no sistema</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="quantidadeMultas" style="flex: 0.5;" oninput="atualizarPreview()">
+          <input type="text" id="valorMultas" style="flex: 1.5;" oninput="atualizarPreview()">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn-copiar" onclick="copiarMensagem()">Copiar</button>
+        <button class="btn-limpar" onclick="limparCampos()">Limpar</button>
+      </div>
     </div>
   </div>
   <div class="preview-container"><div class="whatsapp-message" id="previewMsg"></div></div>
 
   <script>
+    const f = (id) => document.getElementById(id).value;
+    const v = (id) => document.getElementById(id).checked;
+
     function capitalizeWords(str) {
       const dWords = ['de', 'da', 'do', 'das', 'dos'];
       return str.toLowerCase().replace(/(?:^|\s|[.])[a-zà-ú]/g, m => m.toUpperCase())
@@ -115,9 +218,6 @@
     }
 
     function gerarTextoMensagem() {
-      const f = (id) => document.getElementById(id).value;
-      const v = (id) => document.getElementById(id).checked;
-
       const marca = f('marca'), modelo = f('modelo'), ano = capitalizeWords(f('ano'));
       const empEm = f('emplacadoEm'), empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
       const prop = formatarProprietario(f('proprietario')), propCnpj = v('proprietarioCnpj');
@@ -176,7 +276,6 @@
     function atualizarPreview() {
       const m = gerarTextoMensagem();
       document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
-      const v = (id) => document.getElementById(id).checked;
       document.getElementById('nomeIntencao').style.display = document.getElementById('dataInclusaoIntencao').style.display = (v('temIntencao') || v('temComunicacao')) ? 'block' : 'none';
       document.getElementById('observacaoTexto').style.display = v('temObservacao') ? 'block' : 'none';
       document.getElementById('emplacadoAnterior').style.display = v('temAnterior') ? 'block' : 'none';
@@ -185,8 +284,7 @@
     }
 
     function copiarMensagem() {
-      const m = gerarTextoMensagem();
-      navigator.clipboard.writeText(m).then(() => alert('✅'));
+      navigator.clipboard.writeText(gerarTextoMensagem()).then(() => alert('✅'));
     }
 
     function limparCampos() {
