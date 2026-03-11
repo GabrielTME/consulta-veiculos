@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consulta de Veículo 2.0</title>
   
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMTITAUd0AAAAuGVYSWZJSSoACAAAAAUAGgEFAAEAAABKAAAAGwEFAAEAAABSAAAAKAEDAAEAAAADAAAAMQECABEAAABaAAAAaYcEAAEAAABsAAAAAAAAAJOTAADoAwAAk5MAAOgDAABQYWludC5ORVQgNS4xLjEyAAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlgAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAACDw8TdzEtbPAAABDdJREFUWEfFl0tsFWUUx39n2gYpJgqYVIIhkvD5ADYYiI0pReLCTTVCdAHO8BB14UJJEONC+s3ACouiiUbRII8ZG4hEJRBjIEEeIYak1hjFYL6GBVGhPlBBA4WUz0Vn2unpvW0pJv6Su7j//5k5Z8797rnnCtdJ7KImj38VmAaMy+WLwDngO+ALQQ7FJu1Wl1ZEtKCJXXSvUPOPNdvPAKxzSySgpgV4B5iq43N+Bz4GeSMx6ffaLFO1gNgtq/dci4HngcvADmBjYrKfAawLpwC7gfn62hKXgTcFSWKTXtIm1QqwLrobfDtwn7J+AdYkJssAWt2TEwTZCzyk4jQdIEsTkzptDCkgdtFcj98PNGivRFtispcA1nc9NanXX9kLNAK1OrDEWaAlMVlnWRxUQP7kR0ZIniObEpOuBdjQtaqu11+Z7vHzgWVAs47OOQuyoNyJ/gJiF9V7/LEKbR+O5YnJdmrRurAFeA24S3tAhyDNxZkICtXj4yrJdwNLgAvaAF6PXTRNi4nJ9gtyP7BPe8Bcj7fFm4C+1s/KT7vm01qpW5qYbBfIE8AV5U/2+FalARCb9M8aqV1UpYgXrItmMtABv7o0VApOCbJi3Yxt1wASkx4AXlQxACuti2ZrEaB1xvZeQZYD+vTflOcksC66HVisAgDWxCb9qyyMDya8BewCTgHf5q/T4B8ox5WJTfpHlcIXxy5qEOvCJUC7Mo8kJntQaf1YF9YCPn8rgCQmu6rCBmFdeAxoUvJSsS58D3hGGasSk32gtBvCuvBZYIuS3w8A/fldEuSQ0m4YQY6WulYwR6wLTwPTS2IPcBy4qgfVMIwD3k5M9pE2CmIX1Xl8cx7r83v/LdaFvwK36QvGwMbEZC9rcST6B9H/RZAvE/8FY7pPAPymxTHyoxZGg1gXzgPuAHq1OQybADNYksbEpCcGawNYFz4GPJcfcvqmIXtGe8r7iV10p8efBOpL8k+CzNKTs4x14XFAT8yV130IPX6tSg5weITkj1ZIfl6QzyUPmAnMy7/7BV6Qz8o3ti5qBH8UqCvFATycmOyA0qCvYxM9/sTQj4yticmeLjowHtgOfFh6tXv8tg1dfV2KXTQZ/NYKyb8cH9x8UGkArO9aUePxOyok7wHZTHnSWRe2VfnV2iPIKx6/BVigzWpPH7voVo/fCTyivfJO2X8GBLHA14PC+njc47+pkvzdSsmtC1vytldK3ikEcfFGL6X3gD88uqWUrwKChdbsvBi7ZRPATx3FUtqdL6U/FMKQr2E+F/aNoohu4Ey+ik8EplTYqsp0C9ISm7SjLA4pgIFOtANztDdGOvM/Jv1PXlBxDiQmPSVIUz7xisk1FnqANiGYXyk51TpQxrpwNrAaWARM0n4VzgOfgGxOTHpSm2VGLKDAumgK+IXAwnyLagBuyZeLC/mZKP89P6fvUYl/AU+EZ2F2S8GBAAAAAElFTkSuQmCC">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMTITAUd0AAAAuGVYSWZJSSoACAAAAAUAGgEFAAEAAABKAAAAGwEFAAEAAABSAAAAKAEDAAEAAAADAAAAMQECABEAAABaAAAAaYcEAAEAAABsAAAAAAAAAJOTAADoAwAAk5MAAOgDAABQYWludC5ORVQgNS4xLjEyAAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlgAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAACDw8TdzEtbPAAABDdJREFUWEfFl0tsFWUUx39n2gYpJgqYVIIhkvD5ADYYiI0pReLCTTVCdAHO8BB14UJJEONC+s3ACouiiUbRII8ZG4hEJRBjIEEeIYak1hjFYL6GBVGhPlBBA4WUz0Vn2unpvW0pJv6Su7j//5k5Z8797rnnCtdJ7KImj38VmAaMy+WLwDngO+ALQQ7FJu1Wl1ZEtKCJXXSvUPOPNdvPAKxzSySgpgV4B5iq43N+Bz4GeSMx6ffaLFO1gNgtq/dci4HngcvADmBjYrKfAawLpwC7gfn62hKXgTcFSWKTXtIm1QqwLrobfDtwn7J+AdYkJssAWt2TEwTZCzyk4jQdIEsTkzptDCkgdtFcj98PNGivRFtispcA1nc9NanXX9kLNAK1OrDEWaAlMVlnWRxUQP7kR0ZIniObEpOuBdjQtaqu11+Z7vHzgWVAs47OOQuyoNyJ/gJiF9V7/LEKbR+O5YnJdmrRurAFeA24S3tAhyDNxZkICtXj4yrJdwNLgAvaAF6PXTRNi4nJ9gtyP7BPe8Bcj7fFm4C+1s/KT7vm01qpW5qYbBfIE8AV5U/2+FalARCb9M8aqV1UpYgXrItmMtAB(continua...)">
   
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -204,8 +204,8 @@
           <label class="checkbox-wrap"><input type="checkbox" id="temIntencao" onchange="atualizarPreview()"> Intenção</label>
           <label class="checkbox-wrap"><input type="checkbox" id="temComunicacao" onchange="atualizarPreview()"> Comunic.</label>
         </div>
-        <input type="text" id="nomeIntencao" style="display: none; margin-bottom:8px;" oninput="atualizarPreview()">
-        <input type="text" id="dataInclusaoIntencao" style="display: none;" oninput="atualizarPreview()">
+        <input type="text" id="nomeIntencao" oninput="atualizarPreview()">
+        <input type="text" id="dataInclusaoIntencao" style="display: none; margin-top:8px;" oninput="atualizarPreview()">
       </div>
 
       <div class="field-group">
@@ -329,7 +329,10 @@
 
     function onInputCapitalize(e) {
       const start = e.target.selectionStart;
-      const newValue = (e.target.id === 'proprietario') ? formatarProprietario(e.target.value) : capitalizeWords(e.target.value);
+      // REGRA APLICADA PARA PROPRIETÁRIO E NOME INTENÇÃO
+      const newValue = (e.target.id === 'proprietario' || e.target.id === 'nomeIntencao') 
+                       ? formatarProprietario(e.target.value) 
+                       : capitalizeWords(e.target.value);
       if (e.target.value !== newValue) { 
         e.target.value = newValue; 
         e.target.setSelectionRange(start, start); 
@@ -415,7 +418,6 @@
       if (marca || modelo || ano) msg += `• *Modelo:* ${marca} ${modelo} ${ano}\n`;
       if (prop) msg += `• *Proprietário:* ${prop}${propCnpj ? ' (CNPJ)' : ''}\n`;
       
-      // LOGICA CIDADE - ESTADO
       if (mun) {
         let localidade = mun;
         if (ufMun) localidade += ` - ${UF_NOMES[ufMun]}`;
@@ -488,9 +490,10 @@
     function atualizarPreview() {
       const m = gerarTextoMensagem();
       document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
+      
       document.getElementById('emplacadoAnterior').style.display = v('temAnterior') ? 'block' : 'none';
       document.getElementById('financiamentoCampos').style.display = v('temFinanciamento') ? 'flex' : 'none';
-      document.getElementById('nomeIntencao').style.display = document.getElementById('dataInclusaoIntencao').style.display = (v('temIntencao') || v('temComunicacao')) ? 'block' : 'none';
+      document.getElementById('dataInclusaoIntencao').style.display = (v('temIntencao') || v('temComunicacao')) ? 'block' : 'none';
       document.getElementById('observacoesContainer').style.display = v('temObservacao') ? 'flex' : 'none';
       document.getElementById('btnMaisObs').style.display = v('temObservacao') ? 'flex' : 'none';
       document.getElementById('renajudContainer').style.display = v('temRenajud') ? 'block' : 'none';
@@ -509,15 +512,19 @@
       document.getElementById('observacoesContainer').innerHTML = '';
       document.getElementById('renajudContainer').innerHTML = '';
       for(let i=0; i<3; i++) adicionarDebito();
-      adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
+      adicionarObservacao(); 
+      adicionarRenajud(); 
+      popularDropdowns(); 
+      atualizarPreview();
     }
 
     window.onload = () => {
       popularDropdowns();
       for(let i=0; i<3; i++) adicionarDebito();
-      adicionarObservacao(); adicionarRenajud();
+      adicionarObservacao(); 
+      adicionarRenajud();
       document.querySelectorAll('input[type="text"]').forEach(i => {
-        if (!['marca','modelo','financiamentoInfo','emplacadoEm','debitoValor'].includes(i.id)) {
+        if (!['marca','modelo','financiamentoInfo','emplacadoEm','debitoValor','dataInclusaoIntencao'].includes(i.id)) {
           i.addEventListener('input', onInputCapitalize);
         }
       });
