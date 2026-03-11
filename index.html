@@ -158,7 +158,12 @@
 
       <div class="field-group">
         <label>Município / Procedência</label>
-        <input type="text" id="emplacadoEm" oninput="atualizarPreview()">
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+          <input type="text" id="emplacadoEm" oninput="atualizarPreview()" style="flex: 2.5;">
+          <select id="municipioEstado" onchange="atualizarPreview()" style="flex: 1;">
+            <option value="">UF</option>
+          </select>
+        </div>
         <label class="checkbox-wrap">
           <input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior
         </label>
@@ -275,11 +280,14 @@
     ];
 
     function popularDropdowns() {
-      const selUf = document.getElementById('emplacadoAnterior');
-      if (selUf.options.length <= 1) {
+      const selAnterior = document.getElementById('emplacadoAnterior');
+      const selMunicipio = document.getElementById('municipioEstado');
+      
+      if (selAnterior.options.length <= 1) {
         Object.keys(UF_NOMES).sort().forEach(sigla => {
           if (sigla !== 'SC') {
-            selUf.add(new Option(sigla, sigla));
+            selAnterior.add(new Option(sigla, sigla));
+            selMunicipio.add(new Option(sigla, sigla));
           }
         });
       }
@@ -393,7 +401,8 @@
 
     function gerarTextoMensagem() {
       const marca = f('marca'), modelo = f('modelo'), ano = f('ano');
-      const empEm = f('emplacadoEm'), empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
+      const mun = f('emplacadoEm'), ufMun = f('municipioEstado');
+      const empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
       const prop = formatarProprietario(f('proprietario')), propCnpj = v('proprietarioCnpj');
       const finan = v('temFinanciamento') ? f('financiamentoInfo') : '', finanInc = v('financiamentoIncluso'), dataCont = f('dataContrato');
       const temRen = v('temRenajud');
@@ -405,27 +414,23 @@
       let msg = `🚗 *DADOS DO VEÍCULO*\n`;
       if (marca || modelo || ano) msg += `• *Modelo:* ${marca} ${modelo} ${ano}\n`;
       if (prop) msg += `• *Proprietário:* ${prop}${propCnpj ? ' (CNPJ)' : ''}\n`;
-      if (empEm) msg += `• *Município:* ${empEm}${empAnt ? ` (Procedência anterior: ${UF_NOMES[empAnt]})` : ''}\n`;
+      
+      // LOGICA CIDADE - ESTADO
+      if (mun) {
+        let localidade = mun;
+        if (ufMun) localidade += ` - ${UF_NOMES[ufMun]}`;
+        msg += `• *Município:* ${localidade}${empAnt ? ` (Procedência anterior: ${UF_NOMES[empAnt]})` : ''}\n`;
+      }
 
       msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
       let statusFinan = finanInc ? "a ser incluído" : "ativo";
-      
-      let bancoFinal = "";
-      if (finan) {
-        if (finan === "do Brasil") {
-          bancoFinal = `(*Banco do Brasil*${dataCont ? ', contrato de ' + dataCont : ''})`;
-        } else {
-          bancoFinal = `(Banco *${finan}*${dataCont ? ', contrato de ' + dataCont : ''})`;
-        }
-      }
+      let bancoFinal = (finan === "do Brasil") ? `(*Banco do Brasil*${dataCont ? ', contrato de ' + dataCont : ''})` : `(Banco *${finan}*${dataCont ? ', contrato de ' + dataCont : ''})`;
       msg += `• *Alienação:* ${finan ? `Possui financiamento ${statusFinan} ${bancoFinal}` : "Não possui"}\n`;
 
       let renList = Array.from(document.querySelectorAll('.selRenajud')).map(s => {
         let val = s.value;
         let label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
-        if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) {
-          return `bloqueio RENAJUD de ${label}`;
-        }
+        if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) return `bloqueio RENAJUD de ${label}`;
         if (val === "execucao-certidao") return "restrição de execução por certidão";
         if (val === "administrativa") return "restrição administrativa";
         if (val === "averbacao") return "averbação de execução por certidão";
@@ -439,8 +444,7 @@
       } else {
         msg += `• *Restrição Judicial:* Possui:\n`;
         renList.forEach((item, index) => {
-          let isLast = index === renList.length - 1;
-          msg += `• ${capitalizeWords(item)}${isLast ? ' 🚫' : ''}\n`;
+          msg += `• ${capitalizeWords(item)}${index === renList.length - 1 ? ' 🚫' : ''}\n`;
         });
       }
 
@@ -472,8 +476,7 @@
       const qtdMul = parseInt(f('quantidadeMultas') || '0');
       const valMul = formatarValorParaString(getFloatDeString(f('valorMultas')));
       if (qtdMul > 0) {
-        let txtM = qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`;
-        msg += `\n• ${txtM}${getFloatDeString(f('valorMultas')) > 0 ? ` (valor total de ${valMul})` : ''}\n`;
+        msg += `\n• ${qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`}${getFloatDeString(f('valorMultas')) > 0 ? ` (valor total de ${valMul})` : ''}\n`;
       }
       
       if (avisoSP) msg += `\n⚠️ *O Detran de SP pode conter informações desatualizadas*`;
@@ -485,7 +488,6 @@
     function atualizarPreview() {
       const m = gerarTextoMensagem();
       document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
-      
       document.getElementById('emplacadoAnterior').style.display = v('temAnterior') ? 'block' : 'none';
       document.getElementById('financiamentoCampos').style.display = v('temFinanciamento') ? 'flex' : 'none';
       document.getElementById('nomeIntencao').style.display = document.getElementById('dataInclusaoIntencao').style.display = (v('temIntencao') || v('temComunicacao')) ? 'block' : 'none';
@@ -507,17 +509,13 @@
       document.getElementById('observacoesContainer').innerHTML = '';
       document.getElementById('renajudContainer').innerHTML = '';
       for(let i=0; i<3; i++) adicionarDebito();
-      adicionarObservacao(); 
-      adicionarRenajud(); 
-      popularDropdowns(); 
-      atualizarPreview();
+      adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
     }
 
     window.onload = () => {
       popularDropdowns();
       for(let i=0; i<3; i++) adicionarDebito();
-      adicionarObservacao(); 
-      adicionarRenajud();
+      adicionarObservacao(); adicionarRenajud();
       document.querySelectorAll('input[type="text"]').forEach(i => {
         if (!['marca','modelo','financiamentoInfo','emplacadoEm','debitoValor'].includes(i.id)) {
           i.addEventListener('input', onInputCapitalize);
