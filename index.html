@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consulta de Veículo 2.0</title>
+  
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMTITAUd0AAAAuGVYSWZJSSoACAAAAAUAGgEFAAEAAABKAAAAGwEFAAEAAABSAAAAKAEDAAEAAAADAAAAMQECABEAAABaAAAAaYcEAAEAAABsAAAAAAAAAJOTAADoAwAAk5MAAOgDAABQYWludC5ORVQgNS4xLjEyAAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlgAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAACDw8TdzEtbPAAABDdJREFUWEfFl0tsFWUUx39n2gYpJgqYVIIhkvD5ADYYiI0pReLCTTVCdAHO8BB14UJJEONC+s3ACouiiUbRII8ZG4hEJRBjIEEeIYak1hjFYL6GBVGhPlBBA4WUz0Vn2unpvW0pJv6Su7j//5k5Z8797rnnCtdJ7KImj38VmAaMy+WLwDngO+ALQQ7FJu1Wl1ZEtKCJXXSvUPOPNdvPAKxzSySgpgV4B5iq43N+Bz4GeSMx6ffaLFO1gNgtq/dci4HngcvADmBjYrKfAawLpwC7gfn62hKXgTcFSWKTXtIm1QqwLrobfDtwn7J+AdYkJssAWt2TEwTZCzyk4jQdIEsTkzptDCkgdtFcj98PNGivRFtispcA1nc9NanXX9kLNAK1OrDEWaAlMVlnWRxUQP7kR0ZIniObEpOuBdjQtaqu11+Z7vHzgWVAs47OOQuyoNyJ/gJiF9V7/LEKbR+O5YnJdmrRurAFeA24S3tAhyDNxZkICtXj4yrJdwNLgAvaAF6PXTRNi4nJ9gtyP7BPe8Bcj7fFm4C+1s/KT7vm01qpW5qYbBfIE8AV5U/2+FalARCb9M8aqV1UpYgXrItmMtABv7o0VApOCbJi3Yxt1wASkx4AXlQxACuti2ZrEaB1xvZeQZYD+vTflOcksC66HVisAgDWxCb9qyyMDya8BewCTgHf5q/T4B8ox5WJTfpHlcIXxy5qEOvCJUC7Mo8kJntQaf1YF9YCPn8rgCQmu6rCBmFdeAxoUvJSsS58D3hGGasSk32gtBvCuvBZYIuS3w8A/fldEuSQ0m4YQY6WulYwR6wLTwPTS2IPcBy4qgfVMIwD3k5M9pE2CmIX1Xl8cx7r83v/LdaFvwK36QvGwMbEZC9rcST6B9H/RZAvE/8FY7pPAPymxTHyoxZGg1gXzgPuAHq1OQybADNYksbEpCcGawNYFz4GPJcfcvqmIXtGe8r7iV10p8efBOpL8k+CzNKTs4x14XFAT8yV130IPX6tSg5weITkj1ZIfl6QzyUPmAnMy7/7BV6Qz8o3ti5qBH8UqCvFATycmOyA0qCvYxM9/sTQj4yticmeLjowHtgOfFh6tXv8tg1dfV2KXTQZ/NYKyb8cH9x8UGkArO9aUePxOyok7wHZTHnSWRe2VfnV2iPIKx6/BVigzWpPH7voVo/fCTyivfJO2X8GBLHA14PC+njc47+pkvzdSsmtC1vytldK3ikEcfFGL6X3gD88uqWUrwKChdbsvBi7ZRPATx3FUtqdL6U/FMKQr2E+F/aNoohu4Ey+ik8EplTYqsp0C9ISm7SjLA4pgIFOtANztDdGOvM/Jv1PXlBxDiQmPSVIUz7xisk1FnqANiGYXyk51TpQxrpwNrAaWARM0n4VzgOfgGxOTHpSm2VGLKDAumgK+IXAwnyLagBuyZeLC/mZKP89P6fvUYl/AU+EZ2F2S8GBAAAAAElFTkSuQmCC">
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -22,48 +24,112 @@
       padding: 30px 20px;
       font-family: 'Inter', sans-serif;
     }
+
     .form-container > div { max-width: 400px; width: 100%; }
-    .field-group { margin-bottom: 18px; border-bottom: 1px solid #444; padding-bottom: 14px; }
+
+    .field-group { 
+      margin-bottom: 18px; 
+      border-bottom: 1px solid #444; 
+      padding-bottom: 14px; 
+    }
     
-    label { display: block; font-weight: 700; margin-bottom: 8px; color: #FFFFFF; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    label { 
+      display: block; 
+      font-weight: 700; 
+      margin-bottom: 8px; 
+      color: #FFFFFF; 
+      font-size: 12px; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+    }
     
     input[type="text"], select { 
-      width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; 
-      background: #151515; color: #FFFFFF; font-size: 14px; transition: border-color 0.3s;
-      font-family: 'Inter', sans-serif; font-weight: 400; outline: none;
+      width: 100%; 
+      padding: 12px; 
+      border-radius: 6px; 
+      border: 1px solid #444; 
+      background: #151515; 
+      color: #FFFFFF; 
+      font-size: 14px; 
+      transition: border-color 0.3s;
+      font-family: 'Inter', sans-serif; 
+      font-weight: 400; 
+      outline: none;
       display: block;
     }
+
     input[type="text"]:focus, select:focus { border-color: #7FDB5C; }
 
     .buttons { display: flex; gap: 12px; margin-top: 25px; }
     .calc-buttons { display: flex; gap: 8px; margin-top: 8px; }
 
-    button { padding: 12px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: transform 0.1s; }
+    button { 
+      padding: 12px; 
+      border-radius: 6px; 
+      border: none; 
+      font-weight: 700; 
+      cursor: pointer; 
+      font-family: 'Inter', sans-serif; 
+      transition: transform 0.1s; 
+    }
+
     button:active { transform: scale(0.97); }
     
-    .btn-copiar, .plus-button, .btn-calc, .btn-shortcut { background: #7FDB5C; color: #000000; }
+    .btn-copiar, .plus-button, .btn-calc, .btn-shortcut { 
+      background: #7FDB5C; 
+      color: #000000; 
+    }
+
     .btn-copiar:hover, .btn-calc:hover, .btn-shortcut:hover { background: #96e678; }
+    
     .btn-limpar { background: #3F3F3F; color: #FFFFFF; flex: 1; }
     .btn-copiar { flex: 1; }
     .btn-calc { font-size: 11px; padding: 8px; flex: 1; }
 
     .plus-button { 
       width: 34px; height: 34px; 
-      display: inline-flex; align-items: center; justify-content: center; 
-      font-size: 24px; line-height: 0; padding: 0; 
-      margin-top: 8px; border-radius: 6px; 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 24px; 
+      line-height: 0; 
+      padding: 0; 
+      margin-top: 8px; 
+      border-radius: 6px; 
     }
 
     .btn-shortcut { 
-      height: 34px; padding: 0 12px; 
-      font-size: 11px; margin-top: 8px; border-radius: 6px;
+      height: 34px; 
+      padding: 0 12px; 
+      font-size: 11px; 
+      margin-top: 8px; 
+      border-radius: 6px; 
     }
 
-    .checkbox-wrap { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #B5B5B5; cursor: pointer; margin-top: 5px; font-weight: 700; }
+    .checkbox-wrap { 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      font-size: 12px; 
+      color: #B5B5B5; 
+      cursor: pointer; 
+      margin-top: 5px; 
+      font-weight: 700; 
+    }
+
     input[type="checkbox"] { accent-color: #7FDB5C; width: 16px; height: 16px; cursor: pointer; }
 
     .preview-container { background: #161717; display: flex; align-items: center; justify-content: center; flex: 1 1 0; }
-    .whatsapp-message { background: #144D37; color: #e9edef; border-radius: 7.5px; padding: 14px 18px; max-width: 600px; font-size: 18px; line-height: 1.5; white-space: pre-wrap; }
+    .whatsapp-message { 
+      background: #144D37; 
+      color: #e9edef; 
+      border-radius: 7.5px; 
+      padding: 14px 18px; 
+      max-width: 600px; 
+      font-size: 18px; 
+      line-height: 1.5; 
+      white-space: pre-wrap; 
+    }
     #previewMsg b { font-weight: bold; }
     
     .row-item { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; width: 100%; }
@@ -85,13 +151,17 @@
       <div class="field-group">
         <label>Proprietário</label>
         <input type="text" id="proprietario" oninput="atualizarPreview()">
-        <label class="checkbox-wrap"><input type="checkbox" id="proprietarioCnpj" onchange="atualizarPreview()"> CNPJ</label>
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="proprietarioCnpj" onchange="atualizarPreview()"> CNPJ
+        </label>
       </div>
 
       <div class="field-group">
         <label>Município / Procedência</label>
         <input type="text" id="emplacadoEm" oninput="atualizarPreview()">
-        <label class="checkbox-wrap"><input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior</label>
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior
+        </label>
         <select id="emplacadoAnterior" style="display: none; margin-top:8px;" onchange="atualizarPreview()">
             <option value="">Selecione o estado</option>
         </select>
@@ -116,8 +186,10 @@
 
       <div class="field-group">
         <label>Restrição Judicial / Adm.</label>
-        <label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui</label>
-        <div id="renajudContainer" style="display: none;"></div>
+        <label class="checkbox-wrap" style="margin-bottom:10px;">
+          <input type="checkbox" id="temRenajud" onchange="atualizarPreview()"> Possui
+        </label>
+        <div id="renajudContainer" style="display: none; width: 100%;"></div>
         <button id="btnMaisRenajud" class="plus-button" type="button" onclick="adicionarRenajud()" style="display: none;">+</button>
       </div>
 
@@ -133,8 +205,10 @@
 
       <div class="field-group">
         <label>Observações</label>
-        <label class="checkbox-wrap" style="margin-bottom:10px;"><input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Adicionar</label>
-        <div id="observacoesContainer" style="display: none; flex-direction: column;"></div>
+        <label class="checkbox-wrap" style="margin-bottom:10px;">
+          <input type="checkbox" id="temObservacao" onchange="atualizarPreview()"> Adicionar
+        </label>
+        <div id="observacoesContainer" style="display: none; width: 100%; flex-direction: column;"></div>
         <button id="btnMaisObs" class="plus-button" type="button" onclick="adicionarObservacao()" style="display: none;">+</button>
       </div>
 
@@ -165,8 +239,11 @@
       </div>
 
       <div class="field-group" style="border-bottom: none;">
-        <label>Avisos Adicionais</label>
-        <label class="checkbox-wrap"><input type="checkbox" id="temAvisoSP" onchange="atualizarPreview()"> SP</label>
+        <label>Informações Desatualizadas</label>
+        <div style="display: flex; gap: 15px;">
+          <label class="checkbox-wrap"><input type="checkbox" id="temAvisoSP" onchange="atualizarPreview()"> SP</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="temAvisoRS" onchange="atualizarPreview()"> RS</label>
+        </div>
       </div>
 
       <div class="buttons">
@@ -182,37 +259,38 @@
     const v = (id) => document.getElementById(id).checked;
 
     const UF_NOMES = {
-        'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas', 'BA': 'Bahia', 'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo', 'GO': 'Goiás', 'MA': 'Maranhão', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais', 'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco', 'PI': 'Piauí', 'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte', 'RS': 'Rio Grande do Sul', 'RO': 'Rondônia', 'RR': 'Roraima', 'SP': 'São Paulo', 'SE': 'Sergipe', 'TO': 'Tocantins'
+      'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas', 'BA': 'Bahia', 'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo', 'GO': 'Goiás', 'MA': 'Maranhão', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais', 'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco', 'PI': 'Piauí', 'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte', 'RS': 'Rio Grande do Sul', 'RO': 'Rondônia', 'RR': 'Roraima', 'SP': 'São Paulo', 'SE': 'Sergipe', 'TO': 'Tocantins'
     };
 
     const BANCOS = ["Ailos", "Aymoré", "Bradesco", "C6", "Daycoval", "Digimais", "do Brasil", "Itaucard", "PAN", "Sicoob", "Sicredi", "Volkswagen", "Votorantim"].sort();
 
     const RENAJUD_OPCOES = [
-        {val: "transferência", label: "Transferência"},
-        {val: "licenciamento", label: "Licenciamento"},
-        {val: "circulação", label: "Circulação"},
-        {val: "penhora", label: "Penhora"},
-        {val: "execucao-certidao", label: "Execução por certidão"},
-        {val: "administrativa", label: "Administrativa"},
-        {val: "averbacao", label: "Averbação"}
+      {val: "transferência", label: "Transferência"},
+      {val: "licenciamento", label: "Licenciamento"},
+      {val: "circulação", label: "Circulação"},
+      {val: "penhora", label: "Penhora"},
+      {val: "execucao-certidao", label: "Execução por certidão"},
+      {val: "administrativa", label: "Administrativa"},
+      {val: "averbacao", label: "Averbação"}
     ];
 
     function popularDropdowns() {
-        const selUf = document.getElementById('emplacadoAnterior');
-        if(selUf.options.length <= 1) {
-            Object.keys(UF_NOMES).sort().forEach(sigla => {
-                let opt = document.createElement('option'); opt.value = sigla; opt.text = sigla;
-                selUf.add(opt);
-            });
-        }
-        const selBanco = document.getElementById('financiamentoSelect');
-        if(selBanco.options.length <= 1) {
-            BANCOS.forEach(banco => {
-                let display = banco === "do Brasil" ? "Banco do Brasil" : banco;
-                let opt = document.createElement('option'); opt.value = banco; opt.text = display;
-                selBanco.add(opt);
-            });
-        }
+      const selUf = document.getElementById('emplacadoAnterior');
+      if (selUf.options.length <= 1) {
+        Object.keys(UF_NOMES).sort().forEach(sigla => {
+          if (sigla !== 'SC') {
+            selUf.add(new Option(sigla, sigla));
+          }
+        });
+      }
+
+      const selBanco = document.getElementById('financiamentoSelect');
+      if (selBanco.options.length <= 1) {
+        BANCOS.forEach(banco => {
+          let display = banco === "do Brasil" ? "Banco do Brasil" : banco;
+          selBanco.add(new Option(display, banco));
+        });
+      }
     }
 
     function formatarValorParaString(num) {
@@ -244,52 +322,73 @@
     function onInputCapitalize(e) {
       const start = e.target.selectionStart;
       const newValue = (e.target.id === 'proprietario') ? formatarProprietario(e.target.value) : capitalizeWords(e.target.value);
-      if (e.target.value !== newValue) { e.target.value = newValue; e.target.setSelectionRange(start, start); }
+      if (e.target.value !== newValue) { 
+        e.target.value = newValue; 
+        e.target.setSelectionRange(start, start); 
+      }
     }
 
     function adicionarDebito() {
       const container = document.getElementById('debitosContainer');
       const count = container.querySelectorAll('.row-item').length;
-      const linha = document.createElement('div'); linha.className = 'row-item';
-      const input = document.createElement('input'); input.type = 'text'; input.className = 'descricaoDebito'; input.addEventListener('input', atualizarPreview);
+      const linha = document.createElement('div'); 
+      linha.className = 'row-item';
+
+      const input = document.createElement('input'); 
+      input.type = 'text'; 
+      input.className = 'descricaoDebito'; 
+      input.addEventListener('input', atualizarPreview);
       linha.appendChild(input);
+
       if (count === 0) {
-          const wrap = document.createElement('div'); wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '2px';
-          wrap.innerHTML = `<label class="checkbox-wrap"><input type="checkbox" id="dia25" onchange="atualizarPreview()"> Em dia 25</label>
-                            <label class="checkbox-wrap"><input type="checkbox" id="dia26" onchange="atualizarPreview()"> Em dia 26</label>`;
-          linha.appendChild(wrap);
+        const wrap = document.createElement('div'); 
+        wrap.style.display = 'flex'; 
+        wrap.style.flexDirection = 'column'; 
+        wrap.style.gap = '2px';
+        wrap.innerHTML = `
+          <label class="checkbox-wrap"><input type="checkbox" id="dia25" onchange="atualizarPreview()"> Em dia 25</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="dia26" onchange="atualizarPreview()"> Em dia 26</label>
+        `;
+        linha.appendChild(wrap);
       }
       container.appendChild(linha);
     }
 
     function adicionarTransferenciaVistoria() {
-        const container = document.getElementById('debitosContainer');
-        ["Transferência", "Vistoria"].forEach(texto => {
-            const linha = document.createElement('div'); linha.className = 'row-item';
-            const input = document.createElement('input'); input.type = 'text'; 
-            input.className = 'descricaoDebito'; input.value = texto;
-            input.addEventListener('input', atualizarPreview);
-            linha.appendChild(input);
-            container.appendChild(linha);
-        });
-        atualizarPreview();
+      const container = document.getElementById('debitosContainer');
+      ["Transferência", "Vistoria"].forEach(texto => {
+        const linha = document.createElement('div'); 
+        linha.className = 'row-item';
+        const input = document.createElement('input'); 
+        input.type = 'text'; 
+        input.className = 'descricaoDebito'; 
+        input.value = texto;
+        input.addEventListener('input', atualizarPreview);
+        linha.appendChild(input);
+        container.appendChild(linha);
+      });
+      atualizarPreview();
     }
 
     function adicionarObservacao() {
-      const input = document.createElement('input'); input.type = 'text'; input.className = 'textoObservacao'; 
-      input.style.marginBottom = '8px'; input.addEventListener('input', atualizarPreview);
+      const input = document.createElement('input'); 
+      input.type = 'text'; 
+      input.className = 'textoObservacao'; 
+      input.style.marginBottom = '8px'; 
+      input.addEventListener('input', atualizarPreview);
       document.getElementById('observacoesContainer').appendChild(input);
     }
 
     function adicionarRenajud() {
-        const sel = document.createElement('select'); sel.className = 'selRenajud'; sel.style.marginBottom = '8px';
-        sel.addEventListener('change', atualizarPreview);
-        RENAJUD_OPCOES.forEach(optData => {
-            let o = document.createElement('option'); o.value = optData.val; o.text = optData.label;
-            sel.add(o);
-        });
-        document.getElementById('renajudContainer').appendChild(sel);
-        atualizarPreview();
+      const sel = document.createElement('select'); 
+      sel.className = 'selRenajud'; 
+      sel.style.marginBottom = '8px';
+      sel.addEventListener('change', atualizarPreview);
+      RENAJUD_OPCOES.forEach(optData => {
+        sel.add(new Option(optData.label, optData.val));
+      });
+      document.getElementById('renajudContainer').appendChild(sel);
+      atualizarPreview();
     }
 
     function gerarTextoMensagem() {
@@ -299,10 +398,9 @@
       const finan = v('temFinanciamento') ? f('financiamentoInfo') : '', finanInc = v('financiamentoIncluso'), dataCont = f('dataContrato');
       const temRen = v('temRenajud');
       const valTot = f('debitoValor').includes('R$') ? f('debitoValor') : formatarValorParaString(getFloatDeString(f('debitoValor')));
-      const qtdMul = parseInt(f('quantidadeMultas') || '0'), valMul = formatarValorParaString(getFloatDeString(f('valorMultas')));
       const d25 = document.getElementById('dia25')?.checked, d26 = document.getElementById('dia26')?.checked;
       const temInt = v('temIntencao'), temCom = v('temComunicacao'), nomeInt = formatarProprietario(f('nomeIntencao')), dataInt = f('dataInclusaoIntencao');
-      const avisoSP = v('temAvisoSP');
+      const avisoSP = v('temAvisoSP'), avisoRS = v('temAvisoRS');
 
       let msg = `🚗 *DADOS DO VEÍCULO*\n`;
       if (marca || modelo || ano) msg += `• *Modelo:* ${marca} ${modelo} ${ano}\n`;
@@ -314,45 +412,42 @@
       
       let bancoFinal = "";
       if (finan) {
-          if (finan === "do Brasil") {
-              bancoFinal = `(*Banco do Brasil*${dataCont ? ', contrato de ' + dataCont : ''})`;
-          } else {
-              bancoFinal = `(Banco *${finan}*${dataCont ? ', contrato de ' + dataCont : ''})`;
-          }
+        if (finan === "do Brasil") {
+          bancoFinal = `(*Banco do Brasil*${dataCont ? ', contrato de ' + dataCont : ''})`;
+        } else {
+          bancoFinal = `(Banco *${finan}*${dataCont ? ', contrato de ' + dataCont : ''})`;
+        }
       }
       msg += `• *Alienação:* ${finan ? `Possui financiamento ${statusFinan} ${bancoFinal}` : "Não possui"}\n`;
 
       let renList = Array.from(document.querySelectorAll('.selRenajud')).map(s => {
-          let val = s.value;
-          let label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
-          if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) {
-              return `bloqueio RENAJUD de ${label}`;
-          } else if (val === "execucao-certidao") {
-              return "restrição de execução por certidão";
-          } else if (val === "administrativa") {
-              return "restrição administrativa";
-          } else if (val === "averbacao") {
-              return "averbação de execução por certidão";
-          }
-          return label;
+        let val = s.value;
+        let label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
+        if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) {
+          return `bloqueio RENAJUD de ${label}`;
+        }
+        if (val === "execucao-certidao") return "restrição de execução por certidão";
+        if (val === "administrativa") return "restrição administrativa";
+        if (val === "averbacao") return "averbação de execução por certidão";
+        return label;
       });
 
       if (!temRen || renList.length === 0) {
-          msg += `• *Restrição Judicial:* Não possui\n`;
+        msg += `• *Restrição Judicial:* Não possui\n`;
       } else if (renList.length === 1) {
-          msg += `• *Restrição Judicial:* Possui ${capitalizeWords(renList[0])} 🚫\n`;
+        msg += `• *Restrição Judicial:* Possui ${capitalizeWords(renList[0])} 🚫\n`;
       } else {
-          msg += `• *Restrição Judicial:* Possui:\n`;
-          renList.forEach((item, index) => {
-              let isLast = index === renList.length - 1;
-              msg += `• ${capitalizeWords(item)}${isLast ? ' 🚫' : ''}\n`;
-          });
+        msg += `• *Restrição Judicial:* Possui:\n`;
+        renList.forEach((item, index) => {
+          let isLast = index === renList.length - 1;
+          msg += `• ${capitalizeWords(item)}${isLast ? ' 🚫' : ''}\n`;
+        });
       }
 
       let txtVenda = "Não possui";
       if ((temInt || temCom) && nomeInt) {
-          let prefixo = (temInt && temCom) ? "Intenção e comunicação de venda registrada" : (temInt ? "Intenção de venda registrada" : "Comunicação de venda registrada");
-          txtVenda = `${prefixo} para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}`;
+        let prefixo = (temInt && temCom) ? "Intenção e comunicação de venda registrada" : (temInt ? "Intenção de venda registrada" : "Comunicação de venda registrada");
+        txtVenda = `${prefixo} para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}`;
       }
       msg += `• *Venda:* ${txtVenda}\n`;
 
@@ -374,17 +469,23 @@
         msg += `• Sem débitos, veículo em dia (2026)\n`;
       }
 
+      const qtdMul = parseInt(f('quantidadeMultas') || '0');
+      const valMul = formatarValorParaString(getFloatDeString(f('valorMultas')));
       if (qtdMul > 0) {
         let txtM = qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`;
         msg += `\n• ${txtM}${getFloatDeString(f('valorMultas')) > 0 ? ` (valor total de ${valMul})` : ''}\n`;
       }
+      
       if (avisoSP) msg += `\n⚠️ *O Detran de SP pode conter informações desatualizadas*`;
+      if (avisoRS) msg += `\n⚠️ *O Detran do RS pode conter informações desatualizadas*`;
+
       return msg.trim();
     }
 
     function atualizarPreview() {
       const m = gerarTextoMensagem();
       document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
+      
       document.getElementById('emplacadoAnterior').style.display = v('temAnterior') ? 'block' : 'none';
       document.getElementById('financiamentoCampos').style.display = v('temFinanciamento') ? 'flex' : 'none';
       document.getElementById('nomeIntencao').style.display = document.getElementById('dataInclusaoIntencao').style.display = (v('temIntencao') || v('temComunicacao')) ? 'block' : 'none';
@@ -394,25 +495,33 @@
       document.getElementById('btnMaisRenajud').style.display = v('temRenajud') ? 'block' : 'none';
     }
 
-    function copiarMensagem() { navigator.clipboard.writeText(gerarTextoMensagem()).then(() => alert('✅')); }
+    function copiarMensagem() { 
+      navigator.clipboard.writeText(gerarTextoMensagem()).then(() => alert('✅')); 
+    }
 
     function limparCampos() {
-        document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
-        document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
-        document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-        document.getElementById('debitosContainer').innerHTML = '';
-        document.getElementById('observacoesContainer').innerHTML = '';
-        document.getElementById('renajudContainer').innerHTML = '';
-        for(let i=0; i<3; i++) adicionarDebito();
-        adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
+      document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+      document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+      document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+      document.getElementById('debitosContainer').innerHTML = '';
+      document.getElementById('observacoesContainer').innerHTML = '';
+      document.getElementById('renajudContainer').innerHTML = '';
+      for(let i=0; i<3; i++) adicionarDebito();
+      adicionarObservacao(); 
+      adicionarRenajud(); 
+      popularDropdowns(); 
+      atualizarPreview();
     }
 
     window.onload = () => {
       popularDropdowns();
       for(let i=0; i<3; i++) adicionarDebito();
-      adicionarObservacao(); adicionarRenajud();
+      adicionarObservacao(); 
+      adicionarRenajud();
       document.querySelectorAll('input[type="text"]').forEach(i => {
-        if (!['marca','modelo','financiamentoInfo','emplacadoEm','debitoValor'].includes(i.id)) i.addEventListener('input', onInputCapitalize);
+        if (!['marca','modelo','financiamentoInfo','emplacadoEm','debitoValor'].includes(i.id)) {
+          i.addEventListener('input', onInputCapitalize);
+        }
       });
       atualizarPreview();
     };
