@@ -329,7 +329,6 @@
 
     function onInputCapitalize(e) {
       const start = e.target.selectionStart;
-      // REGRA APLICADA PARA PROPRIETÁRIO E NOME INTENÇÃO
       const newValue = (e.target.id === 'proprietario' || e.target.id === 'nomeIntencao') 
                        ? formatarProprietario(e.target.value) 
                        : capitalizeWords(e.target.value);
