@@ -67,6 +67,7 @@
 
     input[type="text"]:focus, select:focus { border-color: #7FDB5C; }
 
+    /* BOTÕES */
     .buttons { display: flex; gap: 12px; margin-top: 25px; }
     .calc-buttons { display: flex; gap: 8px; margin-top: 8px; }
 
@@ -126,6 +127,7 @@
 
     input[type="checkbox"] { accent-color: #7FDB5C; width: 16px; height: 16px; cursor: pointer; }
 
+    /* PAINEL DE PREVIEW */
     .preview-container { 
       background: #161717; 
       display: flex; 
@@ -143,7 +145,11 @@
       font-size: 18px; 
       line-height: 1.5; 
       white-space: pre-wrap; 
+      outline: none;
+      border: 1px solid transparent;
+      cursor: text;
     }
+    .whatsapp-message:focus { border-color: #7FDB5C; }
 
     #previewMsg b { font-weight: bold; }
     
@@ -185,8 +191,7 @@
           <input type="checkbox" id="temAnterior" onchange="atualizarPreview()"> Procedência anterior
         </label>
         <select id="emplacadoAnterior" style="display: none; margin-top:8px;" onchange="atualizarPreview()">
-            <option value="">Selecione o estado</option>
-        </select>
+            <option value="">UF</option> </select>
       </div>
 
       <div class="field-group">
@@ -276,7 +281,7 @@
   </div>
 
   <div class="preview-container">
-    <div class="whatsapp-message" id="previewMsg"></div>
+    <div class="whatsapp-message" id="previewMsg" contenteditable="true"></div>
   </div>
 
   <script>
@@ -284,16 +289,16 @@
     const v = (id) => document.getElementById(id).checked;
 
     const UF_NOMES = {
-      'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Pará','PB':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'
+      'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Paraíba','PB':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'
     };
 
     const BANCOS = ["Ailos","Aymoré","Bradesco","C6","Daycoval","Digimais","do Brasil","Itaucard","PAN","Sicoob","Sicredi","Volkswagen","Votorantim"].sort();
     
     const RENAJUD_OPCOES = [
-      {val:"transferência",label:"Transferência"},
-      {val:"licenciamento",label:"Licenciamento"},
-      {val:"circulação",label:"Circulação"},
-      {val:"penhora",label:"Penhora"},
+      {val:"transferência",label:"RENAJUD de Transferência"},
+      {val:"licenciamento",label:"RENAJUD de Licenciamento"},
+      {val:"circulação",label:"RENAJUD de Circulação"},
+      {val:"penhora",label:"RENAJUD de Penhora"},
       {val:"execucao-certidao",label:"Execução por certidão"},
       {val:"administrativa",label:"Administrativa"},
       {val:"averbacao",label:"Averbação"}
@@ -463,24 +468,34 @@
       let bancoFinal = (finan === "do Brasil") ? `(*Banco do Brasil*${dataCont ? ', contrato de ' + dataCont : ''})` : `(Banco *${finan}*${dataCont ? ', contrato de ' + dataCont : ''})`;
       msg += `• *Alienação:* ${finan ? `Possui financiamento ${statusFinan} ${bancoFinal}` : "Não possui"}\n`;
 
+      const needsEmoji = ["transferência", "licenciamento", "circulação", "penhora", "administrativa"];
       let renList = Array.from(document.querySelectorAll('.selRenajud')).map(s => {
         let val = s.value;
         let label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
-        if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) return `bloqueio RENAJUD de ${label}`;
-        if (val === "execucao-certidao") return "restrição de execução por certidão";
-        if (val === "administrativa") return "restrição administrativa";
-        if (val === "averbacao") return "averbação de execução por certidão";
-        return label;
+        let desc = label;
+        if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) {
+          desc = `bloqueio RENAJUD de ${val}`;
+        } else if (val === "execucao-certidao") {
+          desc = "restrição de execução por certidão";
+        } else if (val === "administrativa") {
+          desc = "restrição administrativa";
+        } else if (val === "averbacao") {
+          desc = "averbação de execução por certidão";
+        }
+        return { desc: desc, val: val };
       });
 
       if (!temRen || renList.length === 0) {
         msg += `• *Restrição:* Não possui\n`;
       } else if (renList.length === 1) {
-        msg += `• *Restrição:* Possui ${renList[0].charAt(0).toUpperCase() + renList[0].slice(1)} 🚫\n`;
+        let item = renList[0];
+        let emoji = needsEmoji.includes(item.val) ? " 🚫" : "";
+        msg += `• *Restrição:* Possui ${item.desc.charAt(0).toLowerCase() + item.desc.slice(1)}${emoji}\n`;
       } else {
         msg += `• *Restrição:* Possui:\n`;
-        renList.forEach((item, index) => {
-          msg += `• ${item.charAt(0).toUpperCase() + item.slice(1)}${index === renList.length - 1 ? ' 🚫' : ''}\n`;
+        renList.forEach((item) => {
+          let emoji = needsEmoji.includes(item.val) ? " 🚫" : "";
+          msg += `${item.desc.charAt(0).toUpperCase() + item.desc.slice(1)}${emoji}\n`;
         });
       }
 
@@ -522,6 +537,8 @@
     }
 
     function atualizarPreview() {
+      if (document.activeElement.id === 'previewMsg') return;
+
       const m = gerarTextoMensagem();
       document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
       
@@ -539,7 +556,8 @@
     }
 
     function copiarMensagem() { 
-      navigator.clipboard.writeText(gerarTextoMensagem()).then(() => alert('✅')); 
+      const preview = document.getElementById('previewMsg');
+      navigator.clipboard.writeText(preview.innerText).then(() => alert('✅')); 
     }
 
     function limparCampos() {
