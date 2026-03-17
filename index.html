@@ -147,6 +147,7 @@
       border: 1px solid transparent;
       cursor: text;
     }
+    
     .whatsapp-message:focus { border-color: #7FDB5C; }
 
     #previewMsg b { font-weight: bold; }
@@ -240,7 +241,21 @@
 
       <div class="field-group">
         <label>Débitos</label>
+        
+        <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="dia25" onchange="atualizarPreview()"> Em dia 25
+          </label>
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="dia26" onchange="atualizarPreview()"> Em dia 26
+          </label>
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="ipvaLic" onchange="toggleIpvaLic()"> IPVA + LIC.
+          </label>
+        </div>
+
         <div id="debitosContainer"></div>
+        
         <div style="display: flex; gap: 8px;">
             <button class="plus-button" type="button" onclick="adicionarDebito()">+</button>
             <button class="btn-shortcut" type="button" onclick="adicionarTransferenciaVistoria()">+ Transferência</button>
@@ -287,90 +302,184 @@
     const f = (id) => document.getElementById(id).value;
     const v = (id) => document.getElementById(id).checked;
 
-    const UF_NOMES = {'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'};
-    const BANCOS = ["Ailos","Aymoré","Bradesco","C6","Daycoval","Digimais","do Brasil","Itaucard","PAN","Sicoob","Sicredi","Volkswagen","Votorantim"].sort();
-    const RENAJUD_OPCOES = [{val:"transferência",label:"RENAJUD de Transferência"},{val:"licenciamento",label:"RENAJUD de Licenciamento"},{val:"circulação",label:"RENAJUD de Circulação"},{val:"penhora",label:"RENAJUD de Penhora"},{val:"execucao-certidao",label:"Execução por certidão"},{val:"administrativa",label:"Administrativa"},{val:"averbacao",label:"Averbação"}];
+    const UF_NOMES = {
+      'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Pará','PB':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'
+    };
 
-    function onInputPlaca(e) { e.target.value = e.target.value.toUpperCase(); atualizarPreview(); }
+    const BANCOS = ["Ailos","Aymoré","Bradesco","C6","Daycoval","Digimais","do Brasil","Itaucard","PAN","Sicoob","Sicredi","Volkswagen","Votorantim"].sort();
+    
+    const RENAJUD_OPCOES = [
+      {val:"transferência",label:"RENAJUD de Transferência"},
+      {val:"licenciamento",label:"RENAJUD de Licenciamento"},
+      {val:"circulação",label:"RENAJUD de Circulação"},
+      {val:"penhora",label:"RENAJUD de Penhora"},
+      {val:"execucao-certidao",label:"Execução por certidão"},
+      {val:"administrativa",label:"Administrativa"},
+      {val:"averbacao",label:"Averbação"}
+    ];
+
+    function onInputPlaca(e) { 
+      e.target.value = e.target.value.toUpperCase(); 
+      atualizarPreview(); 
+    }
     
     function onInputData(e) {
       let val = e.target.value.replace(/\D/g, '').substring(0, 8);
       if (val.length >= 5) val = `${val.substring(0,2)}/${val.substring(2,4)}/${val.substring(4)}`;
       else if (val.length >= 3) val = `${val.substring(0,2)}/${val.substring(2)}`;
-      e.target.value = val; atualizarPreview();
+      e.target.value = val; 
+      atualizarPreview();
     }
 
     function formatarProprietario(str, isSimple = false) {
       const dWords = ['de', 'da', 'do', 'das', 'dos'];
-      let texto = str.toLowerCase().replace(/(?:^|\s|[.])[a-zà-ú]/g, m => m.toUpperCase()).replace(/\b([Dd][aeo]s?)\b/g, m => dWords.includes(m.toLowerCase()) ? m.toLowerCase() : m);
-      return isSimple ? texto : texto.replace(/\bltda\b/gi, 'LTDA').replace(/\bme\b/gi, 'ME').replace(/\bE\b/g, 'e');
+      let texto = str.toLowerCase()
+                     .replace(/(?:^|\s|[.])[a-zà-ú]/g, m => m.toUpperCase())
+                     .replace(/\b([Dd][aeo]s?)\b/g, m => dWords.includes(m.toLowerCase()) ? m.toLowerCase() : m);
+      
+      if (isSimple) return texto;
+      return texto.replace(/\bltda\b/gi, 'LTDA').replace(/\bme\b/gi, 'ME').replace(/\bE\b/g, 'e');
     }
 
     function onInputCapitalize(e) {
       const start = e.target.selectionStart;
-      const newValue = formatarProprietario(e.target.value, e.target.id === 'emplacadoEm');
-      if (e.target.value !== newValue) { e.target.value = newValue; e.target.setSelectionRange(start, start); }
+      const isSimple = e.target.id === 'emplacadoEm';
+      const newValue = formatarProprietario(e.target.value, isSimple);
+      
+      if (e.target.value !== newValue) { 
+        e.target.value = newValue; 
+        e.target.setSelectionRange(start, start); 
+      }
+      atualizarPreview();
+    }
+
+    function toggleIpvaLic() {
+      const inputs = document.querySelectorAll('.descricaoDebito');
+      const isChecked = document.getElementById('ipvaLic').checked;
+      
+      if (isChecked) {
+        if (inputs.length < 1) adicionarDebito();
+        if (inputs.length < 2) adicionarDebito();
+        
+        const updatedInputs = document.querySelectorAll('.descricaoDebito');
+        updatedInputs[0].value = "Licenciamento 2026";
+        updatedInputs[1].value = "IPVA 2026";
+      } else {
+        if (inputs[0] && inputs[0].value === "Licenciamento 2026") inputs[0].value = "";
+        if (inputs[1] && inputs[1].value === "IPVA 2026") inputs[1].value = "";
+      }
       atualizarPreview();
     }
 
     function popularDropdowns() {
-      const selAnterior = document.getElementById('emplacadoAnterior'), selMunicipio = document.getElementById('municipioEstado');
+      const selAnterior = document.getElementById('emplacadoAnterior');
+      const selMunicipio = document.getElementById('municipioEstado');
+      
       if (selAnterior.options.length <= 1) {
-        Object.keys(UF_NOMES).sort().forEach(sigla => { if (sigla !== 'SC') { selAnterior.add(new Option(sigla, sigla)); selMunicipio.add(new Option(sigla, sigla)); }});
+        Object.keys(UF_NOMES).sort().forEach(sigla => {
+          if (sigla !== 'SC') {
+            selAnterior.add(new Option(sigla, sigla));
+            selMunicipio.add(new Option(sigla, sigla));
+          }
+        });
       }
+
       const selBanco = document.getElementById('financiamentoSelect');
-      if (selBanco.options.length <= 1) BANCOS.forEach(b => selBanco.add(new Option(b === "do Brasil" ? "Banco do Brasil" : b, b)));
+      if (selBanco.options.length <= 1) {
+        BANCOS.forEach(banco => {
+          let display = banco === "do Brasil" ? "Banco do Brasil" : banco;
+          selBanco.add(new Option(display, banco));
+        });
+      }
     }
 
     function adicionarDebito() {
       const container = document.getElementById('debitosContainer');
-      const count = container.querySelectorAll('.row-item').length;
-      const linha = document.createElement('div'); linha.className = 'row-item';
-      const input = document.createElement('input'); input.type = 'text'; input.className = 'descricaoDebito'; input.addEventListener('input', atualizarPreview);
+      const linha = document.createElement('div'); 
+      linha.className = 'row-item';
+
+      const input = document.createElement('input'); 
+      input.type = 'text'; 
+      input.className = 'descricaoDebito'; 
+      input.addEventListener('input', atualizarPreview);
       linha.appendChild(input);
-      if (count === 0) {
-        const wrap = document.createElement('div'); wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '2px';
-        wrap.innerHTML = `<label class="checkbox-wrap"><input type="checkbox" id="dia25" onchange="atualizarPreview()"> Em dia 25</label><label class="checkbox-wrap"><input type="checkbox" id="dia26" onchange="atualizarPreview()"> Em dia 26</label>`;
-        linha.appendChild(wrap);
-      }
       container.appendChild(linha);
     }
 
     function adicionarTransferenciaVistoria() {
+      const container = document.getElementById('debitosContainer');
       ["Transferência", "Vistoria"].forEach(texto => {
-        const linha = document.createElement('div'); linha.className = 'row-item';
-        const input = document.createElement('input'); input.type = 'text'; input.className = 'descricaoDebito'; input.value = texto; input.addEventListener('input', atualizarPreview);
-        linha.appendChild(input); document.getElementById('debitosContainer').appendChild(linha);
+        const linha = document.createElement('div'); 
+        linha.className = 'row-item';
+        const input = document.createElement('input'); 
+        input.type = 'text'; 
+        input.className = 'descricaoDebito'; 
+        input.value = texto;
+        input.addEventListener('input', atualizarPreview);
+        linha.appendChild(input);
+        document.getElementById('debitosContainer').appendChild(linha);
       });
       atualizarPreview();
     }
 
     function adicionarObservacao() {
-      const input = document.createElement('input'); input.type = 'text'; input.className = 'textoObservacao'; input.style.marginBottom = '8px'; input.addEventListener('input', atualizarPreview);
+      const input = document.createElement('input'); 
+      input.type = 'text'; 
+      input.className = 'textoObservacao'; 
+      input.style.marginBottom = '8px'; 
+      input.addEventListener('input', atualizarPreview);
       document.getElementById('observacoesContainer').appendChild(input);
     }
 
     function adicionarRenajud() {
-      const sel = document.createElement('select'); sel.className = 'selRenajud'; sel.style.marginBottom = '8px'; sel.addEventListener('change', atualizarPreview);
-      RENAJUD_OPCOES.forEach(opt => sel.add(new Option(opt.label, opt.val)));
-      document.getElementById('renajudContainer').appendChild(sel); atualizarPreview();
+      const sel = document.createElement('select'); 
+      sel.className = 'selRenajud'; 
+      sel.style.marginBottom = '8px';
+      sel.addEventListener('change', atualizarPreview);
+      RENAJUD_OPCOES.forEach(optData => {
+        sel.add(new Option(optData.label, optData.val));
+      });
+      document.getElementById('renajudContainer').appendChild(sel);
+      atualizarPreview();
     }
 
-    function formatarValorParaString(num) { return 'R$' + num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-    function getFloatDeString(str) { return parseFloat(str.replace(/[^\d,]/g, '').replace(',', '.')) || 0; }
-    function ajustarValor(soma) { document.getElementById('debitoValor').value = formatarValorParaString(getFloatDeString(f('debitoValor')) + soma); atualizarPreview(); }
+    function formatarValorParaString(num) {
+      return 'R$' + num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function getFloatDeString(str) {
+      return parseFloat(str.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+    }
+
+    function ajustarValor(soma) {
+      let atual = getFloatDeString(f('debitoValor'));
+      document.getElementById('debitoValor').value = formatarValorParaString(atual + soma);
+      atualizarPreview();
+    }
 
     function gerarTextoMensagem() {
-      const placa = f('placa'), marca = f('marca'), modelo = f('modelo'), ano = f('ano'), mun = f('emplacadoEm'), ufMun = f('municipioEstado'), empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
-      const prop = f('proprietario'), propCnpj = v('proprietarioCnpj'), finan = v('temFinanciamento') ? f('financiamentoInfo') : '', finanInc = v('financiamentoIncluso'), dataCont = f('dataContrato'), temRen = v('temRenajud');
+      const placa = f('placa'), marca = f('marca'), modelo = f('modelo'), ano = f('ano');
+      const mun = f('emplacadoEm'), ufMun = f('municipioEstado');
+      const empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
+      const prop = f('proprietario'), propCnpj = v('proprietarioCnpj');
+      const finan = v('temFinanciamento') ? f('financiamentoInfo') : '', finanInc = v('financiamentoIncluso'), dataCont = f('dataContrato');
+      const temRen = v('temRenajud');
       const valTot = f('debitoValor').includes('R$') ? f('debitoValor') : formatarValorParaString(getFloatDeString(f('debitoValor')));
+      
+      const d25 = v('dia25'), d26 = v('dia26');
       const temInt = v('temIntencao'), temCom = v('temComunicacao'), nomeInt = f('nomeIntencao'), dataInt = f('dataInclusaoIntencao');
+      const avisoSP = v('temAvisoSP'), avisoRS = v('temAvisoRS');
 
       let msg = `🚗 *DADOS DO VEÍCULO*\n`;
       if (placa) msg += `• *Placa:* ${placa}\n`;
       if (marca || modelo || ano) msg += `• *Modelo:* ${marca} ${modelo} ${ano}\n`;
       if (prop) msg += `• *Proprietário:* ${prop}${propCnpj ? ' (CNPJ)' : ''}\n`;
-      if (mun) msg += `• *Município:* ${mun}${ufMun ? ' - ' + UF_NOMES[ufMun] : ''}${empAnt ? ` (Procedência anterior: ${UF_NOMES[empAnt]})` : ''}\n`;
+      
+      if (mun) {
+        let localidade = mun;
+        if (ufMun) localidade += ` - ${UF_NOMES[ufMun]}`;
+        msg += `• *Município:* ${localidade}${empAnt ? ` (Procedência anterior: ${UF_NOMES[empAnt]})` : ''}\n`;
+      }
 
       msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
       let statusFinan = finanInc ? "a ser incluído" : "ativo";
@@ -379,48 +488,92 @@
 
       const needsEmoji = ["transferência", "licenciamento", "circulação", "penhora", "administrativa"];
       let renList = Array.from(document.querySelectorAll('.selRenajud')).map(s => {
-        let val = s.value, label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
-        let desc = (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) ? `bloqueio RENAJUD de ${val}` : (val === "execucao-certidao" ? "restrição de execução por certidão" : (val === "administrativa" ? "restrição administrativa" : (val === "averbacao" ? "averbação de execução por certidão" : label)));
-        return { desc, val };
+        let val = s.value;
+        let label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
+        let desc = label;
+        if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) {
+          desc = `bloqueio RENAJUD de ${val}`;
+        } else if (val === "execucao-certidao") {
+          desc = "restrição de execução por certidão";
+        } else if (val === "administrativa") {
+          desc = "restrição administrativa";
+        } else if (val === "averbacao") {
+          desc = "averbação de execução por certidão";
+        }
+        return { desc: desc, val: val };
       });
 
-      if (!temRen || renList.length === 0) msg += `• *Restrição:* Não possui\n`;
-      else if (renList.length === 1) msg += `• *Restrição:* Possui ${renList[0].desc.charAt(0).toLowerCase() + renList[0].desc.slice(1)}${needsEmoji.includes(renList[0].val) ? " 🚫" : ""}\n`;
-      else { msg += `• *Restrição:* Possui:\n`; renList.forEach(i => msg += `${i.desc.charAt(0).toUpperCase() + i.desc.slice(1)}${needsEmoji.includes(i.val) ? " 🚫" : ""}\n`); }
+      if (!temRen || renList.length === 0) {
+        msg += `• *Restrição:* Não possui\n`;
+      } else if (renList.length === 1) {
+        let item = renList[0];
+        let emoji = needsEmoji.includes(item.val) ? " 🚫" : "";
+        msg += `• *Restrição:* Possui ${item.desc.charAt(0).toLowerCase() + item.desc.slice(1)}${emoji}\n`;
+      } else {
+        msg += `• *Restrição:* Possui:\n`;
+        renList.forEach((item) => {
+          let emoji = needsEmoji.includes(item.val) ? " 🚫" : "";
+          msg += `${item.desc.charAt(0).toUpperCase() + item.desc.slice(1)}${emoji}\n`;
+        });
+      }
 
-      if ((temInt || temCom) && nomeInt) msg += `• *Venda:* ${(temInt && temCom) ? "Intenção e comunicação de venda registrada" : (temInt ? "Intenção de venda registrada" : "Comunicação de venda registrada")} para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}\n`;
-      else msg += `• *Venda:* Não possui\n`;
+      if ((temInt || temCom) && nomeInt) {
+        let prefixo = (temInt && temCom) ? "Intenção e comunicação de venda registrada" : (temInt ? "Intenção de venda registrada" : "Comunicação de venda registrada");
+        msg += `• *Venda:* ${prefixo} para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}\n`;
+      } else {
+        msg += `• *Venda:* Não possui\n`;
+      }
 
       const obsArr = Array.from(document.querySelectorAll('.textoObservacao')).map(i => i.value.trim()).filter(v => v);
-      if (v('temObservacao') && obsArr.length > 0) { msg += `\n🔍 *OBSERVAÇÕES*\n`; obsArr.forEach(o => msg += `• ${o}\n`); }
+      if (v('temObservacao') && obsArr.length > 0) {
+        msg += `\n🔍 *OBSERVAÇÕES*\n`;
+        obsArr.forEach(o => msg += `• ${o}\n`);
+      }
 
       msg += `\n💰 *DÉBITOS*\n`;
-      if (document.getElementById('dia25')?.checked) msg += `• Veículo em dia (2025)\n`;
-      if (document.getElementById('dia26')?.checked) msg += `• Veículo em dia (2026)\n`;
-      const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(v => v);
-      if (debs.length > 0) { debs.forEach((d, i) => msg += `• ${d}${i === debs.length - 1 ? ' =' : ' +'}\n`); if (getFloatDeString(f('debitoValor')) > 0) msg += `• *VALOR TOTAL:* ${f('debitoValor').includes('R$') ? f('debitoValor') : formatarValorParaString(getFloatDeString(f('debitoValor')))}\n`; }
-      else if (!v('dia25') && !v('dia26')) msg += `• Sem débitos, veículo em dia (2026)\n`;
+      if (d25) msg += `• Veículo em dia (2025)\n`;
+      if (d26) msg += `• Veículo em dia (2026)\n`;
 
-      const qtdMul = parseInt(f('quantidadeMultas') || '0'), valMul = formatarValorParaString(getFloatDeString(f('valorMultas')));
-      if (qtdMul > 0) msg += `\n• ${qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`}${getFloatDeString(f('valorMultas')) > 0 ? ` (valor total de ${valMul})` : ''}\n`;
+      const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(v => v);
+      if (debs.length > 0) {
+        debs.forEach((d, i) => msg += `• ${d}${i === debs.length - 1 ? ' =' : ' +'}\n`);
+        if (getFloatDeString(f('debitoValor')) > 0) msg += `• *VALOR TOTAL:* ${valTot}\n`;
+      } else if (!d25 && !d26) {
+        msg += `• Sem débitos, veículo em dia (2026)\n`;
+      }
+
+      const qtdMul = parseInt(f('quantidadeMultas') || '0');
+      const valMul = formatarValorParaString(getFloatDeString(f('valorMultas')));
+      if (qtdMul > 0) {
+        msg += `\n• ${qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`}${getFloatDeString(f('valorMultas')) > 0 ? ` (valor total de ${valMul})` : ''}\n`;
+      }
       
-      if (v('temAvisoSP')) msg += `\n⚠️ *O Detran de SP pode conter informações desatualizadas*`;
-      if (v('temAvisoRS')) msg += `\n⚠️ *O Detran do RS pode conter informações desatualizadas*`;
+      if (avisoSP) msg += `\n⚠️ *O Detran de SP pode conter informações desatualizadas*`;
+      if (avisoRS) msg += `\n⚠️ *O Detran do RS pode conter informações desatualizadas*`;
+
       return msg.trim();
     }
 
     function atualizarPreview() {
       if (document.activeElement.id === 'previewMsg') return;
-      document.getElementById('previewMsg').innerHTML = gerarTextoMensagem().replace(/\*([^\*]+)\*/g, '<b>$1</b>');
+
+      const m = gerarTextoMensagem();
+      document.getElementById('previewMsg').innerHTML = m.replace(/\*([^\*]+)\*/g, '<b>$1</b>');
+      
       document.getElementById('emplacadoAnterior').style.display = v('temAnterior') ? 'block' : 'none';
       document.getElementById('financiamentoCampos').style.display = v('temFinanciamento') ? 'flex' : 'none';
+      
       const vVenda = v('temIntencao') || v('temComunicacao');
-      document.getElementById('nomeIntencao').style.display = document.getElementById('dataInclusaoIntencao').style.display = vVenda ? 'block' : 'none';
-      document.getElementById('observacoesContainer').style.display = document.getElementById('btnMaisObs').style.display = v('temObservacao') ? 'flex' : 'none';
-      document.getElementById('renajudContainer').style.display = document.getElementById('btnMaisRenajud').style.display = v('temRenajud') ? 'block' : 'none';
+      document.getElementById('nomeIntencao').style.display = vVenda ? 'block' : 'none';
+      document.getElementById('dataInclusaoIntencao').style.display = vVenda ? 'block' : 'none';
+      
+      document.getElementById('observacoesContainer').style.display = v('temObservacao') ? 'flex' : 'none';
+      document.getElementById('btnMaisObs').style.display = v('temObservacao') ? 'flex' : 'none';
+      document.getElementById('renajudContainer').style.display = v('temRenajud') ? 'block' : 'none';
+      document.getElementById('btnMaisRenajud').style.display = v('temRenajud') ? 'block' : 'none';
     }
 
-    function copiarMensagem() {
+    function copiarMensagem() { 
       const preview = document.getElementById('previewMsg');
       let text = preview.innerHTML;
       text = text.replace(/<b[^>]*>([\s\S]*?)<\/b>/gi, '*$1*');
@@ -428,22 +581,33 @@
       text = text.replace(/<br\s*\/?>/gi, '\n');
       const temp = document.createElement('div');
       temp.innerHTML = text;
-      navigator.clipboard.writeText(temp.innerText.trim()).then(() => alert('✅'));
+      navigator.clipboard.writeText(temp.innerText.trim()).then(() => alert('✅')); 
     }
 
     function limparCampos() {
       document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
       document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
       document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-      document.getElementById('debitosContainer').innerHTML = ''; document.getElementById('observacoesContainer').innerHTML = ''; document.getElementById('renajudContainer').innerHTML = '';
-      for(let i=0; i<3; i++) adicionarDebito(); adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
+      document.getElementById('debitosContainer').innerHTML = '';
+      document.getElementById('observacoesContainer').innerHTML = '';
+      document.getElementById('renajudContainer').innerHTML = '';
+      for(let i=0; i<3; i++) adicionarDebito();
+      adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
     }
 
     window.onload = () => {
-      popularDropdowns(); for(let i=0; i<3; i++) adicionarDebito(); adicionarObservacao(); adicionarRenajud();
+      popularDropdowns();
+      for(let i=0; i<3; i++) adicionarDebito();
+      adicionarObservacao(); adicionarRenajud();
+      
       document.querySelectorAll('input[type="text"]').forEach(i => {
         const ignore = ['placa','marca','modelo','financiamentoInfo','debitoValor','dataInclusaoIntencao','dataContrato','emplacadoEm','proprietario','nomeIntencao'];
-        if (!ignore.includes(i.id)) i.addEventListener('input', (e) => { e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1); atualizarPreview(); });
+        if (!ignore.includes(i.id)) {
+          i.addEventListener('input', (e) => {
+            e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            atualizarPreview();
+          });
+        }
       });
       atualizarPreview();
     };
