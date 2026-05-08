@@ -523,7 +523,7 @@
       if (mun) {
         let localidade = mun;
         if (ufMun) localidade += ` - ${ufMun}`;
-        msg += `• *Município:* ${localidade}${empAnt ? ` (Procedência anterior: ${empAnt})` : ''}\n`;
+        msg += `• *Município:* ${localidade}${empAnt ? ` (Procedência anterior: ${UF_NOMES[empAnt] || empAnt})` : ''}\n`;
       }
 
       msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
