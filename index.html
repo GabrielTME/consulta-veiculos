@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta de Veículo 2.0</title>
+  <title>Consulta de Veículo</title>
   
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMTITAUd0AAAAuGVYSWZJSSoACAAAAAUAGgEFAAEAAABKAAAAGwEFAAEAAABSAAAAKAEDAAEAAAADAAAAMQECABEAAABaAAAAaYcEAAEAAABsAAAAAAAAAJOTAADoAwAAk5MAAOgDAABQYWludC5ORVQgNS4xLjEyAAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlgAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAACDw8TdzEtbPAAABDdJREFUWEfFl0tsFWUUx39n2gYpJgqYVIIhkvD5ADYYiI0pReLCTTVCdAHO8BB14UJJEONC+s3ACouiiUbRII8ZG4hEJRBjIEEeIYak1hjFYL6GBVGhPlBBA4WUz0Vn2unpvW0pJv6Su7j//5k5Z8797rnnCtdJ7KImj38VmAaMy+WLwDngO+ALQQ7FJu1Wl1ZEtKCJXXSvUPOPNdvPAKxzSySgpgV4B5iq43N+Bz4GeSMx6ffaLFO1gNgtq/dci4HngcvADmBjYrKfAawLpwC7gfn62hKXgTcFSWKTXtIm1QqwLrobfDtwn7J+AdYkJssAWt2TEwTZCzyk4jQdIEsTkzptDCkgdtFcj98PNGivRFtispcA1nc9NanXX9kLNAK1OrDEWaAlMVlnWRxUQP7kR0ZIniObEpOuBdjQtaqu11+Z7vHzgWVAs47OOQuyoNyJ/gJiF9V7/LEKbR+O5YnJdmrRurAFeA24S3tAhyDNxZkICtXj4yrJdwNLgAvaAF6PXTRNi4nJ9gtyP7BPe8Bcj7fFm4C+1s/KT7vm01qpW5qYbBfIE8AV5U/2+FalARCb9M8aqV1UpYgXrItmMtABv7o0VApOCbJi3Yxt1wASkx4AXlQxACuti2ZrEaB1xvZeQZYD+vTflOcksC66HVisAgDWxCb9qyyMDya8BewCTgHf5q/T4B8ox5WJTfpHlcIXxy5qEOvCJUC7Mo8kJntQaf1YF9YCPn8rgCQmu6rCBmFdeAxoUvJSsS58D3hGGasSk32gtBvCuvBZYIuS3w8A/fldEuSQ0m4YQY6WulYwR6wLTwPTS2IPcBy4qgfVMIwD3k5M9pE2CmIX1Xl8cx7r83v/LdaFvwK36QvGwMbEZC9rcST6B9H/RZAvE/8FY7pPAPymxTHyoxZGg1gXzgPuAHq1OQybADNYksbEpCcGawNYFz4GPJcfcvqmIXtGe8r7iV10p8efBOpL8k+CzNKTs4x14XFAT8yV130IPX6tSg5weITkj1ZIfl6QzyUPmAnMy7/7BV6Qz8o3ti5qBH8UqCvFATycmOyA0qCvYxM9/sTQj4yticmeLjowHtgOfFh6tXv8tg1dfV2KXTQZ/NYKyb8cH9x8UGkArO9aUePxOyok7wHZTHnSWRe2VfnV2iPIKx6/BVigzWpPH7voVo/fCTyivfJO2X8GBLHA14PC+njc47+pkvzdSsmtC1vytldK3ikEcfFGL6X3gD88uqWUrwKChdbsvBi7ZRPATx3FUtqdL6U/FMKQr2E+F/aNoohu4Ey+ik8EplTYqsp0C9ISm7SjLA4pgIFOtANztDdGOvM/Jv1PXlBxDiQmPSVIUz7xisk1FnqANiGYXyk51TpQxrpwNrAaWARM0n4VzgOfgGxOTHpSm2VGLKDAumgK+IXAwnyLagBuyZeLC/mZKP89P6fvUYl/AU+EZ2F2S8GBAAAAAElFTkSuQmCC">
   
@@ -51,7 +51,7 @@
       letter-spacing: 1px; 
     }
     
-    input[type="text"], select { 
+    input[type="text"], input[type="number"], select { 
       width: 100%; 
       padding: 12px; 
       border-radius: 6px; 
@@ -65,7 +65,7 @@
       display: block;
     }
 
-    input[type="text"]:focus, select:focus { border-color: #7FDB5C; }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: #7FDB5C; }
 
     .buttons { display: flex; gap: 12px; margin-top: 25px; }
     .calc-buttons { display: flex; gap: 8px; margin-top: 8px; }
@@ -164,9 +164,10 @@
         <label>Veículo</label>
         <input type="text" id="placa" oninput="onInputPlaca(event)" style="margin-bottom: 8px;">
         <div style="display: flex; gap: 6px;">
-          <input type="text" id="marca" oninput="atualizarPreview()">
-          <input type="text" id="modelo" oninput="atualizarPreview()">
-          <input type="text" id="ano" oninput="atualizarPreview()">
+          <select id="marca" onchange="atualizarPreview()" style="flex: 1;">
+            <option value=""></option>
+          </select>
+          <input type="text" id="modeloAno" oninput="atualizarPreview()" style="flex: 2;">
         </div>
       </div>
 
@@ -302,12 +303,31 @@
     const f = (id) => document.getElementById(id).value;
     const v = (id) => document.getElementById(id).checked;
 
+    document.addEventListener('input', (e) => {
+      if (e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'number')) {
+        if (e.target.value.startsWith(' ')) {
+          e.target.value = e.target.value.trimStart();
+        }
+      }
+    });
+
+    document.addEventListener('focusout', (e) => {
+      if (e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'number')) {
+        if (e.target.value !== e.target.value.trim()) {
+          e.target.value = e.target.value.trim();
+          atualizarPreview();
+        }
+      }
+    });
+
     const UF_NOMES = {
       'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal','ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul','MG':'Minas Gerais','PA':'Pará','PB':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí','RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'
     };
 
-    const BANCOS = ["Ailos","Aymoré","Bradesco","C6","Daycoval","Digimais","do Brasil","Itaucard","PAN","Sicoob","Sicredi","Volkswagen","Votorantim"].sort();
+    const BANCOS = ["Ailos","Aymoré","Bradesco","C6","Cresol","Daycoval","Digimais","do Brasil","HS Consórcios","Itaucard","Omni","PAN","Safra","Sicoob","Sicredi","Volkswagen","Votorantim"].sort();
     
+    const MARCAS = ["Audi", "BMW", "BYD", "Chana", "Chery", "Chevrolet", "Citroën", "Dafra", "Effa", "Fiat", "Ford", "GWM", "Honda", "Hyundai", "Iveco", "JAC", "Jaguar", "Jeep", "Kawasaki", "Kia", "Land Rover", "Mahindra", "Mercedes-Benz", "Mitsubishi", "Nissan", "Peugeot", "Ram", "Reboque", "Renault", "Scania", "Shineray", "Ssangyong", "Sundown", "Suzuki", "Toyota", "Volkswagen", "Volvo", "Yamaha"].sort();
+
     const RENAJUD_OPCOES = [
       {val:"transferência",label:"RENAJUD de Transferência"},
       {val:"licenciamento",label:"RENAJUD de Licenciamento"},
@@ -391,6 +411,13 @@
           selBanco.add(new Option(display, banco));
         });
       }
+
+      const selMarca = document.getElementById('marca');
+      if (selMarca && selMarca.options.length <= 1) {
+        MARCAS.forEach(marca => {
+          selMarca.add(new Option(marca, marca));
+        });
+      }
     }
 
     function adicionarDebito() {
@@ -432,14 +459,31 @@
     }
 
     function adicionarRenajud() {
+      const div = document.createElement('div');
+      div.className = 'renajud-item';
+      div.style.display = 'flex';
+      div.style.gap = '6px';
+      div.style.marginBottom = '8px';
+
       const sel = document.createElement('select'); 
       sel.className = 'selRenajud'; 
-      sel.style.marginBottom = '8px';
+      sel.style.flex = '1';
       sel.addEventListener('change', atualizarPreview);
       RENAJUD_OPCOES.forEach(optData => {
         sel.add(new Option(optData.label, optData.val));
       });
-      document.getElementById('renajudContainer').appendChild(sel);
+
+      const qtd = document.createElement('input');
+      qtd.type = 'number';
+      qtd.className = 'qtdRenajud';
+      qtd.min = '1';
+      qtd.value = '1';
+      qtd.style.width = '60px';
+      qtd.addEventListener('input', atualizarPreview);
+
+      div.appendChild(sel);
+      div.appendChild(qtd);
+      document.getElementById('renajudContainer').appendChild(div);
       atualizarPreview();
     }
 
@@ -458,7 +502,7 @@
     }
 
     function gerarTextoMensagem() {
-      const placa = f('placa'), marca = f('marca'), modelo = f('modelo'), ano = f('ano');
+      const placa = f('placa'), marca = f('marca'), modeloAno = f('modeloAno');
       const mun = f('emplacadoEm'), ufMun = f('municipioEstado');
       const empAnt = v('temAnterior') ? f('emplacadoAnterior') : '';
       const prop = f('proprietario'), propCnpj = v('proprietarioCnpj');
@@ -472,13 +516,14 @@
 
       let msg = `🚗 *DADOS DO VEÍCULO*\n`;
       if (placa) msg += `• *Placa:* ${placa}\n`;
-      if (marca || modelo || ano) msg += `• *Modelo:* ${marca} ${modelo} ${ano}\n`;
+      let modeloStr = `${marca} ${modeloAno}`.trim();
+      if (modeloStr) msg += `• *Modelo:* ${modeloStr}\n`;
       if (prop) msg += `• *Proprietário:* ${prop}${propCnpj ? ' (CNPJ)' : ''}\n`;
       
       if (mun) {
         let localidade = mun;
-        if (ufMun) localidade += ` - ${UF_NOMES[ufMun]}`;
-        msg += `• *Município:* ${localidade}${empAnt ? ` (Procedência anterior: ${UF_NOMES[empAnt]})` : ''}\n`;
+        if (ufMun) localidade += ` - ${ufMun}`;
+        msg += `• *Município:* ${localidade}${empAnt ? ` (Procedência anterior: ${empAnt})` : ''}\n`;
       }
 
       msg += `\n⚠️ *RESTRIÇÕES E PENDÊNCIAS*\n`;
@@ -487,18 +532,21 @@
       msg += `• *Alienação:* ${finan ? `Possui financiamento ${statusFinan} ${bancoFinal}` : "Não possui"}\n`;
 
       const needsEmoji = ["transferência", "licenciamento", "circulação", "penhora", "administrativa"];
-      let renList = Array.from(document.querySelectorAll('.selRenajud')).map(s => {
+      let renList = Array.from(document.querySelectorAll('.renajud-item')).map(div => {
+        let s = div.querySelector('.selRenajud');
+        let q = div.querySelector('.qtdRenajud');
         let val = s.value;
+        let qtd = parseInt(q.value) || 1;
         let label = RENAJUD_OPCOES.find(o => o.val === val).label.toLowerCase();
         let desc = label;
         if (["transferência", "licenciamento", "circulação", "penhora"].includes(val)) {
-          desc = `bloqueio RENAJUD de ${val}`;
+          desc = qtd > 1 ? `${qtd} bloqueios RENAJUD de ${val}` : `bloqueio RENAJUD de ${val}`;
         } else if (val === "execucao-certidao") {
-          desc = "restrição de execução por certidão";
+          desc = qtd > 1 ? `${qtd} restrições de execução por certidão` : "restrição de execução por certidão";
         } else if (val === "administrativa") {
-          desc = "restrição administrativa";
+          desc = qtd > 1 ? `${qtd} restrições administrativas` : "restrição administrativa";
         } else if (val === "averbacao") {
-          desc = "averbação de execução por certidão";
+          desc = qtd > 1 ? `${qtd} averbações de execução por certidão` : "averbação de execução por certidão";
         }
         return { desc: desc, val: val };
       });
@@ -513,7 +561,7 @@
         msg += `• *Restrição:* Possui:\n`;
         renList.forEach((item) => {
           let emoji = needsEmoji.includes(item.val) ? " 🚫" : "";
-          msg += `${item.desc.charAt(0).toUpperCase() + item.desc.slice(1)}${emoji}\n`;
+          msg += `• ${item.desc.charAt(0).toUpperCase() + item.desc.slice(1)}${emoji}\n`;
         });
       }
 
@@ -601,7 +649,7 @@
       adicionarObservacao(); adicionarRenajud();
       
       document.querySelectorAll('input[type="text"]').forEach(i => {
-        const ignore = ['placa','marca','modelo','financiamentoInfo','debitoValor','dataInclusaoIntencao','dataContrato','emplacadoEm','proprietario','nomeIntencao'];
+        const ignore = ['placa','marca','modeloAno','financiamentoInfo','debitoValor','dataInclusaoIntencao','dataContrato','emplacadoEm','proprietario','nomeIntencao'];
         if (!ignore.includes(i.id)) {
           i.addEventListener('input', (e) => {
             e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
