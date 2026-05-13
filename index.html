@@ -304,7 +304,7 @@
     const v = (id) => document.getElementById(id).checked;
 
     document.addEventListener('input', (e) => {
-      if (e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'number')) {
+      if (e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'number') && e.target.id !== 'modeloAno') {
         if (e.target.value.startsWith(' ')) {
           e.target.value = e.target.value.trimStart();
         }
@@ -312,7 +312,7 @@
     });
 
     document.addEventListener('focusout', (e) => {
-      if (e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'number')) {
+      if (e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'number') && e.target.id !== 'modeloAno') {
         if (e.target.value !== e.target.value.trim()) {
           e.target.value = e.target.value.trim();
           atualizarPreview();
