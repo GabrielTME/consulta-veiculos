@@ -32,6 +32,161 @@ const RENAJUD_OPCOES = [
   {val:"averbacao", label:"Averbação"}
 ];
 
+function atualizarDropdownHistorico() {
+  const sel = el('historicoSelect');
+  sel.innerHTML = '<option value=""></option>';
+  const hist = JSON.parse(localStorage.getItem('histConsultas') || '[]');
+  hist.forEach((h, idx) => {
+    sel.add(new Option(`${h.placa} - ${h.modeloAno}`, idx));
+  });
+}
+
+function salvarHistorico() {
+  const placa = f('placa');
+  if (!placa) return;
+
+  let hist = JSON.parse(localStorage.getItem('histConsultas') || '[]');
+  hist = hist.filter(h => h.placa !== placa);
+
+  const estado = {
+    placa,
+    marca: f('marca'),
+    modeloAno: f('modeloAno'),
+    proprietario: f('proprietario'),
+    proprietarioCnpj: v('proprietarioCnpj'),
+    emplacadoEm: f('emplacadoEm'),
+    municipioEstado: f('municipioEstado'),
+    temAnterior: v('temAnterior'),
+    emplacadoAnterior: f('emplacadoAnterior'),
+    temFinanciamento: v('temFinanciamento'),
+    financiamentoIncluso: v('financiamentoIncluso'),
+    financiamentoSelect: f('financiamentoSelect'),
+    financiamentoInfo: f('financiamentoInfo'),
+    dataContrato: f('dataContrato'),
+    temRenajud: v('temRenajud'),
+    renajuds: Array.from(document.querySelectorAll('.renajud-item')).map(div => ({
+      val: div.querySelector('.selRenajud').value,
+      qtd: div.querySelector('.qtdRenajud').value
+    })),
+    temIntencao: v('temIntencao'),
+    temComunicacao: v('temComunicacao'),
+    nomeIntencao: f('nomeIntencao'),
+    dataInclusaoIntencao: f('dataInclusaoIntencao'),
+    temObservacao: v('temObservacao'),
+    observacoes: Array.from(document.querySelectorAll('.textoObservacao')).map(i => i.value),
+    dia25: v('dia25'),
+    dia26: v('dia26'),
+    ipvaLic: v('ipvaLic'),
+    debitos: Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value),
+    temValorObrigatorio: v('temValorObrigatorio'),
+    debitoValorObrigatorio: f('debitoValorObrigatorio'),
+    debitoValor: f('debitoValor'),
+    temMultasAutuac: v('temMultasAutuac'),
+    quantidadeMultas: f('quantidadeMultas'),
+    valorMultas: f('valorMultas'),
+    temMultasRecor: v('temMultasRecor'),
+    quantidadeMultasRecor: f('quantidadeMultasRecor'),
+    valorMultasRecor: f('valorMultasRecor'),
+    temAvisoSP: v('temAvisoSP'),
+    temAvisoRS: v('temAvisoRS')
+  };
+
+  hist.unshift(estado);
+  if (hist.length > 5) hist.pop();
+
+  localStorage.setItem('histConsultas', JSON.stringify(hist));
+  atualizarDropdownHistorico();
+}
+
+function carregarHistorico(idx) {
+  if (idx === '') return;
+  const hist = JSON.parse(localStorage.getItem('histConsultas') || '[]');
+  const h = hist[idx];
+  if (!h) return;
+
+  const setVal = (id, val) => { if(el(id)) el(id).value = val || ''; };
+  const setChk = (id, checked) => { if(el(id)) el(id).checked = checked || false; };
+
+  setVal('placa', h.placa);
+  setVal('marca', h.marca);
+  setVal('modeloAno', h.modeloAno);
+  setVal('proprietario', h.proprietario);
+  setChk('proprietarioCnpj', h.proprietarioCnpj);
+  setVal('emplacadoEm', h.emplacadoEm);
+  setVal('municipioEstado', h.municipioEstado);
+  setChk('temAnterior', h.temAnterior);
+  setVal('emplacadoAnterior', h.emplacadoAnterior);
+  setChk('temFinanciamento', h.temFinanciamento);
+  setChk('financiamentoIncluso', h.financiamentoIncluso);
+  setVal('financiamentoSelect', h.financiamentoSelect);
+  setVal('financiamentoInfo', h.financiamentoInfo);
+  setVal('dataContrato', h.dataContrato);
+  
+  setChk('temRenajud', h.temRenajud);
+  el('renajudContainer').innerHTML = '';
+  if (h.renajuds && h.renajuds.length > 0) {
+    h.renajuds.forEach(r => {
+      adicionarRenajud();
+      const divs = document.querySelectorAll('.renajud-item');
+      const lastDiv = divs[divs.length - 1];
+      lastDiv.querySelector('.selRenajud').value = r.val;
+      lastDiv.querySelector('.qtdRenajud').value = r.qtd;
+    });
+  } else {
+    adicionarRenajud();
+  }
+
+  setChk('temIntencao', h.temIntencao);
+  setChk('temComunicacao', h.temComunicacao);
+  setVal('nomeIntencao', h.nomeIntencao);
+  setVal('dataInclusaoIntencao', h.dataInclusaoIntencao);
+
+  setChk('temObservacao', h.temObservacao);
+  el('observacoesContainer').innerHTML = '';
+  if (h.observacoes && h.observacoes.length > 0) {
+    h.observacoes.forEach(obs => {
+      adicionarObservacao();
+      const inputs = document.querySelectorAll('.textoObservacao');
+      inputs[inputs.length - 1].value = obs;
+    });
+  } else {
+    adicionarObservacao();
+  }
+
+  setChk('dia25', h.dia25);
+  setChk('dia26', h.dia26);
+  setChk('ipvaLic', h.ipvaLic);
+  
+  el('debitosContainer').innerHTML = '';
+  if (h.debitos && h.debitos.length > 0) {
+    h.debitos.forEach(deb => {
+      adicionarDebito();
+      const inputs = document.querySelectorAll('.descricaoDebito');
+      inputs[inputs.length - 1].value = deb;
+    });
+  } else {
+    for(let i=0; i<3; i++) adicionarDebito();
+  }
+
+  setChk('temValorObrigatorio', h.temValorObrigatorio);
+  setVal('debitoValorObrigatorio', h.debitoValorObrigatorio);
+  setVal('debitoValor', h.debitoValor);
+
+  setChk('temMultasAutuac', h.temMultasAutuac);
+  setVal('quantidadeMultas', h.quantidadeMultas);
+  setVal('valorMultas', h.valorMultas);
+
+  setChk('temMultasRecor', h.temMultasRecor);
+  setVal('quantidadeMultasRecor', h.quantidadeMultasRecor);
+  setVal('valorMultasRecor', h.valorMultasRecor);
+
+  setChk('temAvisoSP', h.temAvisoSP);
+  setChk('temAvisoRS', h.temAvisoRS);
+
+  atualizarPreview();
+  el('historicoSelect').selectedIndex = 0;
+}
+
 function onInputPlaca(e) { 
   e.target.value = e.target.value.toUpperCase(); 
   atualizarPreview(); 
@@ -194,12 +349,15 @@ function gerarTextoMensagem() {
   }
 
   const qtdMul = parseInt(f('quantidadeMultas') || '0');
+  let hasAutuac = false;
   if (v('temMultasAutuac') && qtdMul > 0) {
+    hasAutuac = true;
     msg += `\n• ${qtdMul === 1 ? '1 multa que ainda não caiu no sistema' : `${qtdMul} multas que ainda não caíram no sistema`}${getFloat(f('valorMultas')) > 0 ? ` (valor total de ${formatStrVal(getFloat(f('valorMultas')))})` : ''}\n`;
   }
 
   const qtdMulRec = parseInt(f('quantidadeMultasRecor') || '0');
   if (v('temMultasRecor') && qtdMulRec > 0) {
+    if (!hasAutuac) msg += `\n`;
     msg += `• ${qtdMulRec === 1 ? '1 multa sendo recorrida' : `${qtdMulRec} multas sendo recorridas`}${getFloat(f('valorMultasRecor')) > 0 ? ` (valor total de ${formatStrVal(getFloat(f('valorMultasRecor')))})` : ''}\n`;
   }
   
@@ -228,6 +386,7 @@ function atualizarPreview() {
 }
 
 function copiarMensagem() { 
+  salvarHistorico();
   const temp = document.createElement('div');
   temp.innerHTML = el('previewMsg').innerHTML
     .replace(/<b[^>]*>([\s\S]*?)<\/b>/gi, '*$1*')
@@ -253,6 +412,7 @@ function limparCampos() {
 
 window.onload = () => {
   popularDropdowns();
+  atualizarDropdownHistorico();
   for(let i=0; i<3; i++) adicionarDebito();
   adicionarObservacao(); adicionarRenajud();
   

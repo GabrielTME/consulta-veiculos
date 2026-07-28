@@ -151,6 +151,13 @@
         <button id="btnCopiarMsg" class="btn-copiar" onclick="copiarMensagem()">Copiar</button>
         <button class="btn-limpar" onclick="limparCampos()">Limpar</button>
       </div>
+
+      <div class="field-group" style="border-bottom: none; margin-top: 25px; padding-bottom: 0;">
+        <label>Histórico</label>
+        <select id="historicoSelect" onchange="carregarHistorico(this.value)">
+          <option value=""></option>
+        </select>
+      </div>
     </div>
   </div>
 
