@@ -3,6 +3,8 @@ const f = id => el(id).value.trim();
 const v = id => el(id).checked;
 const toggleVis = (id, cond, dType = 'block') => el(id).style.display = cond ? dType : 'none';
 
+let lastHasDebitos = false;
+
 document.addEventListener('input', e => {
   if (e.target.matches('input[type="text"], input[type="number"]') && e.target.id !== 'modeloAno') {
     if (e.target.value.startsWith(' ')) e.target.value = e.target.value.trimStart();
@@ -159,15 +161,18 @@ function carregarHistorico(idx) {
   setChk('ipvaLic', h.ipvaLic);
   
   el('debitosContainer').innerHTML = '';
+  let loadedHasDebitos = false;
   if (h.debitos && h.debitos.length > 0) {
     h.debitos.forEach(deb => {
       adicionarDebito();
       const inputs = document.querySelectorAll('.descricaoDebito');
       inputs[inputs.length - 1].value = deb;
+      if (deb.trim() !== '') loadedHasDebitos = true;
     });
   } else {
     for(let i=0; i<3; i++) adicionarDebito();
   }
+  lastHasDebitos = loadedHasDebitos;
 
   setChk('chkEmissao', h.chkEmissao !== false);
   setVal('debitoValor', h.debitoValor);
@@ -214,6 +219,12 @@ function onInputCapitalize(e) {
     e.target.setSelectionRange(start, start); 
   }
   atualizarPreview();
+}
+
+function handleDiasChange() {
+  if (v('dia25') || v('dia26')) {
+    el('chkEmissao').checked = false;
+  }
 }
 
 function toggleIpvaLic() {
@@ -337,8 +348,8 @@ function gerarTextoMensagem() {
   if (v('temObservacao') && obsArr.length > 0) msg += `\n🔍 *OBSERVAÇÕES*\n${obsArr.map(o => `• ${o}`).join('\n')}\n`;
 
   msg += `\n💰 *DÉBITOS*\n`;
-  if (v('dia25')) msg += `• Veículo em dia (2025)\n`;
-  if (v('dia26')) msg += `• Veículo em dia (2026)\n`;
+  const d25 = v('dia25');
+  const d26 = v('dia26');
 
   const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(Boolean);
   if (v('chkEmissao')) debs.push('Emissão');
@@ -346,9 +357,17 @@ function gerarTextoMensagem() {
   const valTot = el('debitoValor').value.includes('R$') ? f('debitoValor') : formatStrVal(getFloat(f('debitoValor')));
 
   if (debs.length > 0) {
+    if (d25) msg += `• Veículo em dia (2025)\n`;
+    if (d26) msg += `• Veículo em dia (2026)\n`;
     debs.forEach((d, i) => msg += `• ${d}${i === debs.length - 1 ? ' =' : ' +'}\n`);
-  } else if (!v('dia25') && !v('dia26')) {
-    msg += `• Sem débitos, veículo em dia (2026)\n`;
+  } else {
+    if (d25) {
+      msg += `• Sem débitos, veículo em dia (2025)\n`;
+    } else if (d26) {
+      msg += `• Sem débitos, veículo em dia (2026)\n`;
+    } else {
+      msg += `• Sem débitos, veículo em dia (2026)\n`;
+    }
   }
 
   if (debs.length > 0 || (!v('dia25') && !v('dia26'))) {
@@ -376,6 +395,17 @@ function gerarTextoMensagem() {
 
 function atualizarPreview() {
   if (document.activeElement.id === 'previewMsg') return;
+
+  const currentDebitos = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(Boolean);
+  const hasDebitos = currentDebitos.length > 0;
+  
+  if (hasDebitos && !lastHasDebitos) {
+    el('chkEmissao').checked = true;
+  } else if (!hasDebitos && lastHasDebitos) {
+    el('chkEmissao').checked = false;
+  }
+  lastHasDebitos = hasDebitos;
+
   el('previewMsg').innerHTML = gerarTextoMensagem().replace(/\*([^\*]+)\*/g, '<b>$1</b>');
   
   toggleVis('emplacadoAnterior', v('temAnterior'));
@@ -408,11 +438,15 @@ function copiarMensagem() {
 
 function limparCampos() {
   document.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]').forEach(i => i.value = '');
-  document.querySelectorAll('input[type="checkbox"]:not(#chkEmissao)').forEach(c => c.checked = false);
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
   document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  
   el('debitosContainer').innerHTML = ''; el('observacoesContainer').innerHTML = ''; el('renajudContainer').innerHTML = '';
   for(let i=0; i<3; i++) adicionarDebito();
-  adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
+  adicionarObservacao(); adicionarRenajud(); popularDropdowns(); 
+  
+  lastHasDebitos = false;
+  atualizarPreview();
 }
 
 window.onload = () => {

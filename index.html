@@ -99,8 +99,8 @@
       <div class="field-group">
         <label>Débitos</label>
         <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
-          <label class="checkbox-wrap"><input type="checkbox" id="dia25" onchange="atualizarPreview()"> Em dia 25</label>
-          <label class="checkbox-wrap"><input type="checkbox" id="dia26" onchange="atualizarPreview()"> Em dia 26</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="dia25" onchange="handleDiasChange(); atualizarPreview()"> Em dia 25</label>
+          <label class="checkbox-wrap"><input type="checkbox" id="dia26" onchange="handleDiasChange(); atualizarPreview()"> Em dia 26</label>
           <label class="checkbox-wrap"><input type="checkbox" id="ipvaLic" onchange="toggleIpvaLic()"> IPVA + LIC.</label>
         </div>
         
@@ -108,7 +108,7 @@
         
         <div style="position: relative; width: 100%; margin-bottom: 10px;">
           <input type="text" value="Emissão" readonly style="color: #a1a1aa; cursor: not-allowed; opacity: 0.8; width: 100%; padding-right: 40px;">
-          <input type="checkbox" id="chkEmissao" checked onchange="atualizarPreview()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); margin: 0;">
+          <input type="checkbox" id="chkEmissao" onchange="atualizarPreview()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); margin: 0;">
         </div>
 
         <div style="display: flex; gap: 8px;">
