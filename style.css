@@ -94,12 +94,14 @@ button:active { transform: scale(0.97); }
 }
 
 .btn-shortcut { 
-  height: 34px; 
+  height: 30px; 
   padding: 0 12px; 
-  font-size: 11px; 
+  font-size: 12px; 
   margin-top: 8px; 
   border-radius: 6px;
-  width: max-content;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
 }
 
 .checkbox-wrap { 

@@ -408,9 +408,8 @@ function copiarMensagem() {
 
 function limparCampos() {
   document.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]').forEach(i => i.value = '');
-  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.querySelectorAll('input[type="checkbox"]:not(#chkEmissao)').forEach(c => c.checked = false);
   document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-  el('chkEmissao').checked = true;
   el('debitosContainer').innerHTML = ''; el('observacoesContainer').innerHTML = ''; el('renajudContainer').innerHTML = '';
   for(let i=0; i<3; i++) adicionarDebito();
   adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
