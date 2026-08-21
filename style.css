@@ -93,6 +93,15 @@ button:active { transform: scale(0.97); }
   border-radius: 6px; 
 }
 
+.btn-shortcut { 
+  height: 34px; 
+  padding: 0 12px; 
+  font-size: 11px; 
+  margin-top: 8px; 
+  border-radius: 6px;
+  width: max-content;
+}
+
 .checkbox-wrap { 
   display: flex; 
   align-items: center; 

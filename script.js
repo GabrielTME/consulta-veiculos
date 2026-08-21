@@ -71,6 +71,7 @@ function salvarHistorico() {
     temIntencao: v('temIntencao'),
     temComunicacao: v('temComunicacao'),
     nomeIntencao: f('nomeIntencao'),
+    nomeIntencaoCnpj: v('nomeIntencaoCnpj'),
     dataInclusaoIntencao: f('dataInclusaoIntencao'),
     temObservacao: v('temObservacao'),
     observacoes: Array.from(document.querySelectorAll('.textoObservacao')).map(i => i.value),
@@ -78,8 +79,7 @@ function salvarHistorico() {
     dia26: v('dia26'),
     ipvaLic: v('ipvaLic'),
     debitos: Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value),
-    temValorObrigatorio: v('temValorObrigatorio'),
-    debitoValorObrigatorio: f('debitoValorObrigatorio'),
+    chkEmissao: v('chkEmissao'),
     debitoValor: f('debitoValor'),
     temMultasAutuac: v('temMultasAutuac'),
     quantidadeMultas: f('quantidadeMultas'),
@@ -139,6 +139,7 @@ function carregarHistorico(idx) {
   setChk('temIntencao', h.temIntencao);
   setChk('temComunicacao', h.temComunicacao);
   setVal('nomeIntencao', h.nomeIntencao);
+  setChk('nomeIntencaoCnpj', h.nomeIntencaoCnpj);
   setVal('dataInclusaoIntencao', h.dataInclusaoIntencao);
 
   setChk('temObservacao', h.temObservacao);
@@ -168,8 +169,7 @@ function carregarHistorico(idx) {
     for(let i=0; i<3; i++) adicionarDebito();
   }
 
-  setChk('temValorObrigatorio', h.temValorObrigatorio);
-  setVal('debitoValorObrigatorio', h.debitoValorObrigatorio);
+  setChk('chkEmissao', h.chkEmissao !== false);
   setVal('debitoValor', h.debitoValor);
 
   setChk('temMultasAutuac', h.temMultasAutuac);
@@ -278,6 +278,13 @@ function adicionarRenajud() {
   atualizarPreview();
 }
 
+function adicionar200() {
+  let val = getFloat(f('debitoValor'));
+  val += 200;
+  el('debitoValor').value = formatStrVal(val);
+  atualizarPreview();
+}
+
 const formatStrVal = num => `R$${num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const getFloat = str => parseFloat(str.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
 
@@ -318,10 +325,10 @@ function gerarTextoMensagem() {
     msg += `• *Restrição:* Possui:\n${renList.map(r => `• ${r.desc}${r.emoji}`).join('\n')}\n`;
   }
 
-  const nomeInt = f('nomeIntencao'), dataInt = f('dataInclusaoIntencao');
+  const nomeInt = f('nomeIntencao'), dataInt = f('dataInclusaoIntencao'), intCnpj = v('nomeIntencaoCnpj');
   if ((v('temIntencao') || v('temComunicacao')) && nomeInt) {
     const prefix = v('temIntencao') && v('temComunicacao') ? "Intenção e comunicação" : (v('temIntencao') ? "Intenção" : "Comunicação");
-    msg += `• *Venda:* ${prefix} de venda registrada para ${nomeInt}${dataInt ? ` em ${dataInt}` : ''}\n`;
+    msg += `• *Venda:* ${prefix} de venda registrada para ${nomeInt}${intCnpj ? ' (CNPJ)' : ''}${dataInt ? ` em ${dataInt}` : ''}\n`;
   } else {
     msg += `• *Venda:* Não possui\n`;
   }
@@ -334,7 +341,8 @@ function gerarTextoMensagem() {
   if (v('dia26')) msg += `• Veículo em dia (2026)\n`;
 
   const debs = Array.from(document.querySelectorAll('.descricaoDebito')).map(i => i.value.trim()).filter(Boolean);
-  const valObrig = el('debitoValorObrigatorio').value.includes('R$') ? f('debitoValorObrigatorio') : formatStrVal(getFloat(f('debitoValorObrigatorio')));
+  if (v('chkEmissao')) debs.push('Emissão');
+
   const valTot = el('debitoValor').value.includes('R$') ? f('debitoValor') : formatStrVal(getFloat(f('debitoValor')));
 
   if (debs.length > 0) {
@@ -344,7 +352,6 @@ function gerarTextoMensagem() {
   }
 
   if (debs.length > 0 || (!v('dia25') && !v('dia26'))) {
-    if (v('temValorObrigatorio') && getFloat(valObrig) > 0) msg += `• *VALOR OBRIGATÓRIO:* ${valObrig}\n`;
     if (getFloat(valTot) > 0) msg += `• *VALOR TOTAL:* ${valTot}\n`;
   }
 
@@ -374,13 +381,11 @@ function atualizarPreview() {
   toggleVis('emplacadoAnterior', v('temAnterior'));
   toggleVis('financiamentoCampos', v('temFinanciamento'), 'flex');
   const showVenda = v('temIntencao') || v('temComunicacao');
-  toggleVis('nomeIntencao', showVenda);
-  toggleVis('dataInclusaoIntencao', showVenda);
+  toggleVis('vendaCampos', showVenda);
   toggleVis('observacoesContainer', v('temObservacao'), 'flex');
   toggleVis('btnMaisObs', v('temObservacao'), 'flex');
   toggleVis('renajudContainer', v('temRenajud'));
   toggleVis('btnMaisRenajud', v('temRenajud'));
-  toggleVis('debitoValorObrigatorio', v('temValorObrigatorio'));
   toggleVis('multasAutuacCampos', v('temMultasAutuac'), 'flex');
   toggleVis('multasRecorCampos', v('temMultasRecor'), 'flex');
 }
@@ -396,15 +401,16 @@ function copiarMensagem() {
   navigator.clipboard.writeText(temp.innerText.trim()).then(() => {
     const btn = el('btnCopiarMsg');
     btn.classList.add('success');
-    btn.innerText = '✓ Copiado!';
+    btn.innerText = '✓ Copiado';
     setTimeout(() => { btn.classList.remove('success'); btn.innerText = 'Copiar'; }, 1500);
   }); 
 }
 
 function limparCampos() {
-  document.querySelectorAll('input[type="text"], input[type="number"]').forEach(i => i.value = '');
+  document.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]').forEach(i => i.value = '');
   document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
   document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  el('chkEmissao').checked = true;
   el('debitosContainer').innerHTML = ''; el('observacoesContainer').innerHTML = ''; el('renajudContainer').innerHTML = '';
   for(let i=0; i<3; i++) adicionarDebito();
   adicionarObservacao(); adicionarRenajud(); popularDropdowns(); atualizarPreview();
@@ -417,7 +423,7 @@ window.onload = () => {
   adicionarObservacao(); adicionarRenajud();
   
   document.querySelectorAll('input[type="text"]').forEach(i => {
-    const ignore = ['placa','marca','modeloAno','financiamentoInfo','debitoValor','debitoValorObrigatorio','dataInclusaoIntencao','dataContrato','emplacadoEm','proprietario','nomeIntencao','quantidadeMultas','valorMultas','quantidadeMultasRecor','valorMultasRecor'];
+    const ignore = ['placa','marca','modeloAno','financiamentoInfo','debitoValor','dataInclusaoIntencao','dataContrato','emplacadoEm','proprietario','nomeIntencao','quantidadeMultas','valorMultas','quantidadeMultasRecor','valorMultasRecor'];
     if (!ignore.includes(i.id)) {
       i.addEventListener('input', e => {
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
